@@ -11,7 +11,7 @@ package leetcode;
  *  and x = 0, y = 2,
  *  Return 6.
  */
-public class A302_Smallest_Rectangle_Enclosing_Black_Pixels {
+public class L302_Smallest_Rectangle_Enclosing_Black_Pixels {
 
 	private char[][] image;
 	public int minArea(char[][] iImage, int x, int y) {

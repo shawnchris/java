@@ -6,7 +6,7 @@ package leetcode;
  * Given target value is a floating point.
  * You are guaranteed to have only one unique value in the BST that is closest to the target.
  */
-public class A270_Closest_Binary_Search_Tree_Value {
+public class L270_Closest_Binary_Search_Tree_Value {
 
 	public int closestValue(TreeNode root, double target) {
 		if (root == null) // Base case
