@@ -12,7 +12,7 @@ Here's an example:
 The Largest BST Subtree in this case is the highlighted one. 
 The return value is the subtree's size, which is 3.
 */
-public class A333_Largest_BST_Subtree {
+public class L333_Largest_BST_Subtree {
 	public int largestBSTSubtree(TreeNode root) {
 		int[] res = { 0 };
 		helper(root, res);
