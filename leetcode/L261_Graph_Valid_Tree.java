@@ -18,10 +18,29 @@ You can assume that no duplicate edges will appear in edges. Since all edges are
  * 2. No circle. Use union find to check.
  */
 public class L261_Graph_Valid_Tree {
-
+	public boolean validTree(int n, int[][] edges) {
+		if (n < 0 || edges == null || edges.length != n - 1)
+			return false;
+		
+		UnionFind uf = new UnionFind(n);
+		for (int i = 0; i < edges.length; i++) {
+			int p = edges[i][0];
+			int q = edges[i][1];
+			if (uf.find(p) == uf.find(q))
+				return false;
+			uf.union(p, q);
+		}
+		
+		return true;
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		L261_Graph_Valid_Tree gvt = new L261_Graph_Valid_Tree();
+		int[][] edge1 = {{0, 1}, {0, 2}, {0, 3}, {1, 4}};
+		int[][] edge2 = {{0, 1}, {0, 2}, {1, 2}, {3, 4}};
+		
+		System.out.println(gvt.validTree(5, edge1));
+		System.out.println(gvt.validTree(5, edge2));
 	}
 
 }
