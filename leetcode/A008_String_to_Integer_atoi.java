@@ -7,7 +7,7 @@ public class A008_String_to_Integer_atoi {
 		String input = str.trim();
 		int length = input.length();
 		
-		if (length<=0)	return 0;
+		if (length <= 0) return 0;
 				
 		Map<Character, Integer> numbers = new HashMap<>();
 		for (int i=0; i<10; i++)
@@ -20,13 +20,13 @@ public class A008_String_to_Integer_atoi {
 		boolean positive = true;
 		if (first == '-')	positive = false;
 		char c = ' ';
-		for (int i=0; i<length; i++) {
+		for (int i = 0; i < length; i++) {
 			c = input.charAt(i);
 			if (numbers.containsKey(c)) {
 				result = result * 10 + numbers.get(c);
 				if (result > Integer.MAX_VALUE) break;
 			}
-			else if (i>0) break;
+			else if (i > 0) break;
 		}
 		if (!positive) result = result * -1;
 		
