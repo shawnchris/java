@@ -37,10 +37,5 @@ public class A004_Median_of_Two_Sorted_Arrays {
 			return findKth(nums1, 0, nums2, 0, len / 2 + 1);
 		}
     }
-    
-	public static void main(String[] args) {
-
-
-	}
 
 }
