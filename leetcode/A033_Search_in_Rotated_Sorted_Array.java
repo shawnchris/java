@@ -25,16 +25,9 @@ public class A033_Search_in_Rotated_Sorted_Array {
             }
         }
         
-        if (nums[start] == target)
-            return start;
-        if (nums[end] == target)
-            return end;
+        if (nums[start] == target) return start;
+        if (nums[end] == target) return end;
         return -1;
     }
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
