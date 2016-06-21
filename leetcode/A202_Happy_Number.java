@@ -24,5 +24,4 @@ public class A202_Happy_Number {
         
         return happy;
     }
-    
 }

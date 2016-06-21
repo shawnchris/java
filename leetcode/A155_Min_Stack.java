@@ -28,5 +28,10 @@ public class A155_Min_Stack {
     public int getMin() {
         return minStack.peek();
     }
+    
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
 
 }
