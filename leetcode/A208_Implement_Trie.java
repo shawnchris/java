@@ -25,7 +25,7 @@ public class A208_Implement_Trie {
                 node = newNode;
             }
             if (i == len - 1)
-                node.isEnd = true;
+                node.isWord = true;
         }
     }
 
@@ -40,7 +40,7 @@ public class A208_Implement_Trie {
             char c = word.charAt(i);
             if (node.next[c - 'a'] != null) {
                 node = node.next[c - 'a'];
-                if (i == len - 1 && node.isEnd == false)
+                if (i == len - 1 && node.isWord == false)
                     return false;
             }
             else
