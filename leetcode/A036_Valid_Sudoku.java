@@ -1,43 +1,40 @@
 package leetcode;
-import java.util.*;
 
 public class A036_Valid_Sudoku {
-private Set<Character> set = new HashSet<>();
-    
+
     private boolean checkRow(char[][] board, int row) {
-        set.clear();
+        boolean[] used = new boolean[9];
         for (int i = 0; i < 9; i++) {
             if (board[row][i] == '.') continue;
-            if (set.contains(board[row][i]))
+            if (used[board[row][i] - '1'])
                 return false;
-            set.add(board[row][i]);
+            used[board[row][i] - '1'] = true;
         }
         return true;
     }
     private boolean checkCol(char[][] board, int col) {
-        set.clear();
+    	boolean[] used = new boolean[9];
         for (int i = 0; i < 9; i++) {
             if (board[i][col] == '.') continue;
-            if (set.contains(board[i][col]))
+            if (used[board[i][col] - '1'])
                 return false;
-            set.add(board[i][col]);
+            used[board[i][col] - '1'] = true;
         }
         return true;
     }
     private boolean checkBox(char[][] board, int box) {
-        set.clear();
+    	boolean[] used = new boolean[9];
         int startRow = (box / 3) * 3, startCol = (box % 3) * 3;
         for (int i = startRow; i < startRow + 3; i++) {
             for (int j = startCol; j < startCol + 3; j++) {
                 if (board[i][j] == '.') continue;
-                if (set.contains(board[i][j]))
+                if (used[board[i][j] - '1'])
                     return false;
-                set.add(board[i][j]);
+                used[board[i][j] - '1'] = true;
             }
         }
         return true;
     }
-    
     
     public boolean isValidSudoku(char[][] board) {
         for (int i = 0; i < 9; i++) {
