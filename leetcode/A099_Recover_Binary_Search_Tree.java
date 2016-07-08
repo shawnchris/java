@@ -3,6 +3,7 @@ package leetcode;
  * 1. 1, 2, 3, 4, 5, 6 -> 1, 3, 2, 4, 5, 6
  * 2. 1, 2, 3, 4, 5, 6 -> 1, 5, 3, 4, 2, 6
 */
+
 public class A099_Recover_Binary_Search_Tree {
 	// Two pointers to record wrong nodes
     TreeNode first = null, second = null;
