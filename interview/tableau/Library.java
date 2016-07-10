@@ -1,4 +1,4 @@
-package com.tableau;
+package interview.tableau;
 
 import java.util.*;
 

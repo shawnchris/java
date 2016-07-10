@@ -1,4 +1,4 @@
-package com.tableau;
+package interview.tableau;
 
 public class Solution {
 	// Phone interview

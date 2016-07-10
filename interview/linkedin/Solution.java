@@ -1,4 +1,4 @@
-package com.linkedin;
+package interview.linkedin;
 
 import java.util.*;
 
