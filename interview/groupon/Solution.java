@@ -1,4 +1,4 @@
-package com.groupon;
+package interview.groupon;
 import java.util.*;
 
 /* 1st phone interview

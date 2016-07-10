@@ -1,4 +1,4 @@
-package com.glassdoor;
+package interview.glassdoor;
 
 public class TVRemote {
 	public void printPath(String str)

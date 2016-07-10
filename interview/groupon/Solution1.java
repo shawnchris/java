@@ -1,4 +1,4 @@
-package com.groupon;
+package interview.groupon;
 
 public class Solution1 {
 

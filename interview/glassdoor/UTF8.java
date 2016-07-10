@@ -1,4 +1,4 @@
-package com.glassdoor;
+package interview.glassdoor;
 
 import java.nio.charset.*;
 import java.nio.*;
@@ -53,7 +53,7 @@ public class UTF8 {
 		//System.out.println(isValidUTF8(new byte[]{Byte.valueOf("192")}));
 		
 		String test = "guide (but, yeah, itâ€™s okay to share it with â€˜em).";
-		String test2 = "guide (but, yeah, it’s okay to share it with ‘em).";
+		String test2 = "guide (but, yeah, itï¿½s okay to share it with ï¿½em).";
 		System.out.println( isUTF8MisInterpreted(test)); //true
 		System.out.println( isUTF8MisInterpreted(test2)); //false
 
