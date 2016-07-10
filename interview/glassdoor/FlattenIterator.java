@@ -1,4 +1,4 @@
-package com.glassdoor;
+package interview.glassdoor;
 
 import java.util.*;
 

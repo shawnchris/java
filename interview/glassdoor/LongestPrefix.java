@@ -1,4 +1,4 @@
-package com.glassdoor;
+package interview.glassdoor;
 
 public class LongestPrefix {
     public String longestPrefix(String s1, String s2) {
