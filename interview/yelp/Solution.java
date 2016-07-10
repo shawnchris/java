@@ -1,4 +1,4 @@
-package com.yelp;
+package interview.yelp;
 
 public class Solution {
 

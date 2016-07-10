@@ -1,4 +1,4 @@
-package com.whatsapp;
+package interview.whatsapp;
 import java.util.*;
 
 class MyMapListener {

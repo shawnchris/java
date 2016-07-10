@@ -1,4 +1,4 @@
-package com.tintri;
+package interview.tintri;
 import java.util.*;
 
 public class Solution {

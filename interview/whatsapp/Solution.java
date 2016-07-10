@@ -1,4 +1,4 @@
-package com.whatsapp;
+package interview.whatsapp;
 
 // On-site interview:
 // 1. Phone book design
