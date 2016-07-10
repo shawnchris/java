@@ -1,4 +1,4 @@
-package com.airbnb;
+package interview.airbnb;
 
 import java.io.*;
 import java.util.*;

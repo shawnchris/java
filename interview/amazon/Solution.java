@@ -1,4 +1,4 @@
-package com.amazon;
+package interview.amazon;
 
 // Phone interview:
 // Word Break I + return one solution
