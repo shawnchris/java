@@ -1,4 +1,4 @@
-package csc421;
+package depaul.csc421;
 
 public class LCS {
 
