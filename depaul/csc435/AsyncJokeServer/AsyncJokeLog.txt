@@ -1,0 +1,186 @@
+===============================AsyncJokeServer==================================
+D:\eclipse\workspace\AsyncJokeServer>java AsyncJokeServer
+Gao Shan's JokeServer starting up, listening at port 1565 for JokeClient.
+AdminLooper starting up, listening at port 2565 for JokeClientAdmin.
+Sent joke 4 to Chris
+Sent joke 0 to Dan
+Sent joke 3 to Chris
+Sent joke 1 to Chris
+Sent joke 0 to Chris
+Sent joke 2 to Chris
+Sent joke 3 to Chris
+Sent joke 3 to Dan
+Sent joke 4 to Dan
+Sent joke 2 to Dan
+Server is switching to proverb-mode.
+Sent proverb 0 to Chris
+Sent proverb 3 to Chris
+Sent proverb 2 to Dan
+Server is switching to maintenance-mode.
+Told Chris that server is in maintenance mode.
+Told Dan that server is in maintenance mode.
+Server is switching to joke-mode.
+Sent joke 2 to Chris
+Sent joke 1 to Dan
+Sent joke 3 to Dan
+Server is shutting down.
+
+===============================AsyncJokeClient1==================================
+D:\eclipse\workspace\AsyncJokeServer>java AsyncJokeClient
+Gao Shan's AsyncJokeClient.
+Using server: localhost, Port: 1565 and listening at UDP Port: 7286
+What's your name? Chris
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 12
+Your sum is: 12
+Enter numbers to sum: 1 2 3
+Your sum is: 6
+Enter numbers to sum: 12 23
+Your sum is: 35
+Message from server: Joke E - Never, Chris, under any cirumstances, take a sleeping pill a
+nd a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 3 4 5
+Your sum is: 12
+Enter numbers to sum: 6 7 8
+Your sum is: 21
+Message from server: Joke D - If you think nobody cares you, Chris, try missing a couple o
+f payments.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 4 5 6
+Your sum is: 15
+Enter numbers to sum: 6 7 8
+Your sum is: 21
+Message from server: Joke B - Chris want to die peacefully in the sleep, like Chris's gran
+dfather... Not screaming and yelling like the passengers in his car.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 8 9 0
+Your sum is: 17
+Enter numbers to sum: 1 2
+Your sum is: 3
+Message from server: Joke A - Chris asked God for a bike, but Chris know God doesn't work
+that way. So Chris stole a bike and asked God for forgiveness.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 1 2 3
+Your sum is: 6
+Enter numbers to sum: 2 3 4
+Your sum is: 9
+Message from server: Joke C - Chris, do not argue with an idiot. He will drag you down to
+his level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 1 2 3
+Your sum is: 6
+Enter numbers to sum: 4 5 6
+Your sum is: 15
+Message from server: Joke D - If you think nobody cares you, Chris, try missing a couple o
+f payments.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 4 5 6
+Your sum is: 15
+Enter numbers to sum: 5 6 7
+Your sum is: 18
+Message from server: Proverb A - By other's faults, wise men correct their own. By Chris
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 5 6 7
+Your sum is: 18
+Enter numbers to sum: 7 8 9
+Your sum is: 24
+Message from server: Proverb D - Govern your thoughts when alone, and your tongue when in
+company. By Chris
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 11 22
+Your sum is: 33
+Enter numbers to sum: 33 44
+Your sum is: 77
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 8 9 9
+Your sum is: 26
+Enter numbers to sum: 8 9 0
+Your sum is: 17
+Message from server: Joke C - Chris, do not argue with an idiot. He will drag you down to
+his level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end: quit
+Cancelled by user request.
+
+===============================AsyncJokeClient2==================================
+D:\eclipse\workspace\AsyncJokeServer>java AsyncJokeClient
+Gao Shan's AsyncJokeClient.
+Using server: localhost, Port: 1565 and listening at UDP Port: 7414
+What's your name? Dan
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 9 0 1
+Your sum is: 10
+Enter numbers to sum: 0 0
+Your sum is: 0
+Message from server: Joke A - Dan asked God for a bike, but Dan know God doesn't work that
+ way. So Dan stole a bike and asked God for forgiveness.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 3 4
+Your sum is: 7
+Enter numbers to sum: 5 6
+Your sum is: 11
+Message from server: Joke D - If you think nobody cares you, Dan, try missing a couple of
+payments.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 5 6
+Your sum is: 11
+Enter numbers to sum: 7 8
+Your sum is: 15
+Message from server: Joke E - Never, Dan, under any cirumstances, take a sleeping pill and
+ a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 6 7
+Your sum is: 13
+Enter numbers to sum: 8 9
+Your sum is: 17
+Message from server: Joke C - Dan, do not argue with an idiot. He will drag you down to hi
+s level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 4 5 6
+Your sum is: 15
+Enter numbers to sum: 6 7 8
+Your sum is: 21
+Message from server: Proverb C - Fame like a river is narrowest at its source and broadest
+ afar off. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 4 5
+Your sum is: 9
+Enter numbers to sum: 66 778
+Your sum is: 844
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 1 2 3
+Your sum is: 6
+Enter numbers to sum: 4 5 6
+Your sum is: 15
+Message from server: Joke B - Dan want to die peacefully in the sleep, like Dan's grandfat
+her... Not screaming and yelling like the passengers in his car.
+Input anything to get a joke or proverb, (quit) to end:
+Enter numbers to sum: 1 2 3
+Your sum is: 6
+Enter numbers to sum: 4 5 6
+Your sum is: 15
+Message from server: Joke D - If you think nobody cares you, Dan, try missing a couple of
+payments.
+Input anything to get a joke or proverb, (quit) to end: quit
+Cancelled by user request.
+
+===============================AsyncJokeClientAdmin==================================
+D:\eclipse\workspace\AsyncJokeServer>java AsyncJokeClientAdmin
+Gao Shan's JokeClientAdmin.
+
+Using server: localhost, Port: 2565
+Input a command, (quit) to end:
+Your input is invalid. Please input "joke-mode", "proverb-mode", "maintenance-mode" or "sh
+utdown".
+Input a command, (quit) to end: proverb-mode
+Message from server: server is switching to proverb-mode.
+Input a command, (quit) to end: maintenance-mode
+Message from server: server is switching to maintenance-mode.
+Input a command, (quit) to end: joke-mode
+Message from server: server is switching to joke-mode.
+Input a command, (quit) to end: shutdown
+Message from server: server is shutting down.
+Input a command, (quit) to end: quit
+Cancelled by user request.
