@@ -1,0 +1,183 @@
+<html>
+<head> <title> Gao Sha's Joke Server Checklist </title>
+</head>
+<body>
+
+<FONT FACE="Cambria" SIZE=1>
+1.8
+<br>
+Updates: 
+<ol>
+<li> none
+</ol>
+
+<FONT SIZE=3>
+
+<!-- Copy this template into /joke/checklist.html, add name, change no to -->
+<!-- yes when you complete that task. Read the class contract on checklists!-->
+
+<h1> 
+<center> Program One Checklist -- Multithreaded Joke Server and Client </center> <p>
+</h1>
+<FONT FACE="Cambria" SIZE=4>
+
+Required, <i> <strong>  precisely named </strong> </i> submission files, NO
+subdirectories, NO Packages:
+<ul> 
+
+<li> InetClient.java
+<li> InetServer.java
+<li> JokeClient.java
+<li> JokeServer.java
+<li> JokeClientAdmin.java
+<li> JokeOutput.txt <-- concatenate all output with comments.
+</ul>
+
+Change "No" to "Yes" as you complete the tasks:<p>
+
+
+
+<table border=1 width="60%" >
+
+<tr><td align="Left"><b> <FONT FACE="Cambria" SIZE=5>Task
+</font></b></td>
+<td align="Left"><b><FONT FACE="Cambria" SIZE=5> Complete? </task> 
+</b></td></tr>
+
+<tr> <td align="left"><b>
+My name is... </b></td><td align="left"><b>
+Gao, Shan          </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Basic Inet Client and Server Run </b></td><td align="left"><b>
+Yes          </b></td></tr>
+
+<tr> <td align="left"><b>
+Extensive Comments Inet    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Extensive Comments JokeServer    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Tested with this many clients simultaneously (more than one!)  </b></td><td align="left"><b>
+0                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Returns five jokes   </b></td><td align="left"><b>
+No                    </b></td></tr>
+<tr> <td align="left"><b>
+Returns jokes randomly   </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Labels the jokes A-E    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Returns five proverbs   </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Returns proverbs randomly   </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Labels the proverbs A-E    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Performs name substitution   </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Admin Client connects at different port    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Switches server mode from Joke to Proverb    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Switches to maintenance mode    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Maintains Proverb state, and does not repeat    </b></td><td align="left"><b>
+
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Maintains Joke state, and does not repeat    </b></td><td align="left"><b>
+
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Maintains converstations with interleaved Joke/Proverb modes  </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Only have to type user name once  </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Created ZIP file, submitted to D2L    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+All JokeServer code (no Inet code!) concatenated and submitted to D2L TII link?    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+All files named correctly (see above)    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+All files in ONE directory (no subdirs!)    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Included the correct headers for source files    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+----- BRAGGING RIGHTS BELOW --------- </b></td><td align="left"><b>
+THIS LINE               </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Tested Running between different machines    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+
+<tr> <td align="left"><b>
+Writes and restores state from disk </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Wrote thread-safe code </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+Uses a secure channel for administration    </b></td><td align="left"><b>
+No                    </b></td></tr>
+
+<tr> <td align="left"><b>
+[Fill in custom extra features, one line per feature]    </b></td><td align="left"><b>
+Yes                    </b></td></tr>
+
+</table>
+
+<h2> Optional Comments: </h2>
+
+[Communicate with us about this program here if necessary.]
+
+
+</body></html>
