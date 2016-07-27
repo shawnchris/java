@@ -1,0 +1,237 @@
+=======================JokeServer output=======================
+D:\JokeServer>java JokeServer
+AdminLooper starting up, listening at port 2565 for JokeClientAdmin.
+Gao Shan's JokeServer starting up, listening at port 1565 for JokeClient.
+Sent joke 2 to Chris
+Sent joke 4 to Chris
+Sent joke 0 to Chris
+Sent joke 3 to Chris
+Sent joke 1 to Chris
+Sent joke 4 to Chris
+Sent joke 0 to Chris
+Sent joke 2 to Chris
+Sent joke 1 to Chris
+Sent joke 3 to Chris
+Server is switching to proverb-mode.
+Sent proverb 4 to Dan
+Sent proverb 0 to Dan
+Sent proverb 1 to Dan
+Sent proverb 2 to Dan
+Sent proverb 3 to Dan
+Sent proverb 3 to Dan
+Sent proverb 2 to Dan
+Sent proverb 1 to Dan
+Sent proverb 4 to Dan
+Sent proverb 0 to Dan
+Server is switching to joke-mode.
+Sent joke 2 to Chris
+Sent joke 1 to Chris
+Sent joke 4 to Chris
+Sent joke 2 to Dan
+Sent joke 3 to Dan
+Sent joke 4 to Dan
+Sent joke 1 to Lily
+Sent joke 4 to Lily
+Sent joke 3 to Lily
+Server is switching to proverb-mode.
+Sent proverb 3 to Chris
+Sent proverb 1 to Chris
+Sent proverb 4 to Chris
+Sent proverb 0 to Dan
+Sent proverb 4 to Dan
+Sent proverb 1 to Dan
+Sent proverb 3 to Lily
+Sent proverb 0 to Lily
+Sent proverb 4 to Lily
+Server is switching to maintenance-mode.
+Told Chris that server is in maintenance mode.
+Told Chris that server is in maintenance mode.
+Told Chris that server is in maintenance mode.
+Told Dan that server is in maintenance mode.
+Told Dan that server is in maintenance mode.
+Told Lily that server is in maintenance mode.
+Server is shutting down.
+Client listener is now shutting down as per AdminClient request.
+Admin listener is now shutting down as per AdminClient request.
+
+D:\JokeServer>
+
+=======================JokeClient1 output=======================
+D:\JokeServer>java JokeClient
+Gao Shan's JokeClient.
+
+Using server: localhost, Port: 1565
+What's your name? Chris
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke C - Chris, do not argue with an idiot. He will drag you down to
+his level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke E - Never, Chris, under any cirumstances, take a sleeping pill a
+nd a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke A - Chris asked God for a bike, but Chris know God doesn't work
+that way. So Chris stole a bike and asked God for forgiveness.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke D - If you think nobody cares you, Chris, try missing a couple o
+f payments.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke B - Chris want to die peacefully in the sleep, like Chris's gran
+dfather... Not screaming and yelling like the passengers in his car.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke E - Never, Chris, under any cirumstances, take a sleeping pill a
+nd a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke A - Chris asked God for a bike, but Chris know God doesn't work
+that way. So Chris stole a bike and asked God for forgiveness.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke C - Chris, do not argue with an idiot. He will drag you down to
+his level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke B - Chris want to die peacefully in the sleep, like Chris's gran
+dfather... Not screaming and yelling like the passengers in his car.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke D - If you think nobody cares you, Chris, try missing a couple o
+f payments.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke C - Chris, do not argue with an idiot. He will drag you down to
+his level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke B - Chris want to die peacefully in the sleep, like Chris's gran
+dfather... Not screaming and yelling like the passengers in his car.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke E - Never, Chris, under any cirumstances, take a sleeping pill a
+nd a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb D - Govern your thoughts when alone, and your tongue when in
+company. By Chris
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb B - Conquer of fear of death and you are put into possession
+of your life. By Chris
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb E - Idle folks have most labour. By Chris
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Server is now shutting down. No new connection will be accepted.
+Input anything to get a joke or proverb, (quit) to end: quit
+Cancelled by user request.
+
+D:\JokeServer>
+
+=======================JokeClient2 output=======================
+D:\JokeServer>java JokeClient
+Gao Shan's JokeClient.
+
+Using server: localhost, Port: 1565
+What's your name? Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb E - Idle folks have most labour. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb A - By other's faults, wise men correct their own. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb B - Conquer of fear of death and you are put into possession
+of your life. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb C - Fame like a river is narrowest at its source and broadest
+ afar off. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb D - Govern your thoughts when alone, and your tongue when in
+company. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb D - Govern your thoughts when alone, and your tongue when in
+company. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb C - Fame like a river is narrowest at its source and broadest
+ afar off. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb B - Conquer of fear of death and you are put into possession
+of your life. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb E - Idle folks have most labour. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb A - By other's faults, wise men correct their own. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke C - Dan, do not argue with an idiot. He will drag you down to hi
+s level and beat you with experience.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke D - If you think nobody cares you, Dan, try missing a couple of
+payments.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke E - Never, Dan, under any cirumstances, take a sleeping pill and
+ a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb A - By other's faults, wise men correct their own. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb E - Idle folks have most labour. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb B - Conquer of fear of death and you are put into possession
+of your life. By Dan
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end: quit
+Cancelled by user request.
+
+D:\JokeServer>
+
+=======================JokeClient3 output=======================
+D:\JokeServer>java JokeClient
+Gao Shan's JokeClient.
+
+Using server: localhost, Port: 1565
+What's your name? Lily
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke B - Lily want to die peacefully in the sleep, like Lily's grandf
+ather... Not screaming and yelling like the passengers in his car.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke E - Never, Lily, under any cirumstances, take a sleeping pill an
+d a laxative on the same night.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Joke D - If you think nobody cares you, Lily, try missing a couple of
+ payments.
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb D - Govern your thoughts when alone, and your tongue when in
+company. By Lily
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb A - By other's faults, wise men correct their own. By Lily
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: Proverb E - Idle folks have most labour. By Lily
+Input anything to get a joke or proverb, (quit) to end:
+Message from server: The server is temporarily unavailable -- check-back shortly.
+Input anything to get a joke or proverb, (quit) to end: quit
+Cancelled by user request.
+
+D:\JokeServer>
+
+=======================JokeClientAdmin output=======================
+D:\JokeServer>java JokeClientAdmin
+Gao Shan's JokeClientAdmin.
+
+Using server: localhost, Port: 2565
+Input a command, (quit) to end: proverb-mode
+Message from server: server is switching to proverb-mode.
+Input a command, (quit) to end: joke-mode
+Message from server: server is switching to joke-mode.
+Input a command, (quit) to end: proverb-mode
+Message from server: server is switching to proverb-mode.
+Input a command, (quit) to end: maintenace-mode
+Your input is invalid. Please input "joke-mode", "proverb-mode", "maintenance-mode" or "sh
+utdown".
+Input a command, (quit) to end: maintenance-mode
+Message from server: server is switching to maintenance-mode.
+Input a command, (quit) to end: shutdown
+Message from server: server is shutting down.
+Input a command, (quit) to end:
+Your input is invalid. Please input "joke-mode", "proverb-mode", "maintenance-mode" or "sh
+utdown".
+Input a command, (quit) to end: shutdown
+Message from server: server is now shutting down. no new connection will be accepted.
+Input a command, (quit) to end: quit
+Cancelled by user request.
+
+D:\JokeServer>
