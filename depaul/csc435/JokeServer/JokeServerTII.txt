@@ -1,0 +1,466 @@
+=====================JokeServer.java======================
+
+/*--------------------------------------------------------
+
+1. Name / Date: Gao Shan / Sept. 20, 2014
+
+2. Java version used: jre1.7.0_67
+
+3. Precise command-line compilation examples / instructions:
+
+> javac JokeServer.java
+
+4. Precise examples / instructions to run this program:
+
+In separate shell windows:
+
+> java JokeServer
+> java JokeClient
+> java JokeClientAdmin
+
+All acceptable commands are displayed on the various consoles.
+
+This runs across machines, in which case you have to pass the IP address of
+the server to the clients. For example, if the server is running at
+140.192.1.22 then you would type:
+
+> java JokeClient 140.192.1.22
+> java JokeClientAdmin 140.192.1.22
+
+5. List of files needed for running the program.
+
+ a. checklist-joke.html
+ b. JokeServer.java
+ c. JokeClient.java
+ d. JokeClientAdmin.java
+
+6. Notes:
+
+----------------------------------------------------------*/
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+class Worker extends Thread {
+	Socket sock;
+	Worker (Socket s) {sock = s;}	// Get the socket handler.
+	
+	public void run(){
+		PrintStream out = null;
+		BufferedReader in = null;
+		String clientName = "";
+		String jokestat = "";
+		String proverbstat ="";
+		
+		try {
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			out = new PrintStream(sock.getOutputStream());
+			
+			// The request from client is composed by 3 lines: clientName; joke status; proverb status.
+			clientName = in.readLine();
+			jokestat = in.readLine();
+			proverbstat = in.readLine();
+			
+			if (JokeServer.controlSwitch != true){	// Already requested to shutdown
+				System.out.println("Client listener is now shutting down as per AdminClient request.");
+				out.println("maintenance-mode");
+				out.println("Server is now shutting down. No new connection will be accepted.");
+			}
+			else {
+				if (JokeServer.mode.equalsIgnoreCase("maintenance-mode")) {
+					out.println("maintenance-mode");
+					out.println("The server is temporarily unavailable -- check-back shortly.");
+					System.out.println("Told " + clientName + " that server is in maintenance mode.");
+				}
+				if (JokeServer.mode.equalsIgnoreCase("joke-mode")) {
+					out.println("joke-mode");
+					
+					// If all jokes were sent, start again
+					if (jokestat.equals("11111")) jokestat = "00000";
+					
+					// Trying to get a joke which was not sent
+					Random rand = new Random();
+					int i;
+					do {
+						i = rand.nextInt(5);
+						//System.out.println("Random number - " + i);
+					} while (jokestat.charAt(i)=='1');		
+					String message = JokeServer.jokes[i];
+					out.println(message.replace("XNAME", clientName));
+					System.out.println("Sent joke " + i + " to " + clientName);
+					
+					String newstat = "";
+					for (int j=0; j<5; j++) {
+						if (j != i)
+							newstat = newstat + jokestat.charAt(j);
+						else
+							newstat = newstat + "1";
+					}
+					jokestat = newstat;
+				}
+				if (JokeServer.mode.equalsIgnoreCase("proverb-mode")) {
+					out.println("proverb-mode");
+					
+					// If all jokes were sent, start again
+					if (proverbstat.equals("11111")) proverbstat = "00000";
+					
+					// Trying to get a proverb which was not sent
+					Random rand = new Random();
+					int i;
+					do {
+						i = rand.nextInt(5);
+					} while (proverbstat.charAt(i)=='1');		
+					String message = JokeServer.proverbs[i];
+					out.println(message.replace("XNAME", clientName));
+					System.out.println("Sent proverb " + i + " to " + clientName);
+					
+					String newstat = "";
+					for (int j=0; j<5; j++) {
+						if (j != i)
+							newstat = newstat + proverbstat.charAt(j);
+						else
+							newstat = newstat + "1";
+					}
+					proverbstat = newstat;
+				}
+			}
+			
+			out.println(jokestat); //Send the client's status back.
+			out.println(proverbstat);
+			
+			sock.close();
+		} catch (IOException ioe) {System.out.println(ioe);}
+	}
+}
+
+class AdminWorker extends Thread {
+	Socket sock;
+	AdminWorker (Socket s) {sock = s;}	// Get the socket handler.
+	
+	public void run(){
+		PrintStream out = null;
+		BufferedReader in = null;
+		String cmd = "";
+		
+		try {
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			out = new PrintStream(sock.getOutputStream());
+			
+			// The request from AdminClient is composed by only 1 line which has 4 possible values: 
+			//"joke-mode", "proverb-mode", "maintenance-mode" or "shutdown"
+			cmd = in.readLine();
+			
+			if (JokeServer.controlSwitch != true){	// Already requested to shutdown
+				System.out.println("Admin listener is now shutting down as per AdminClient request.");
+				out.println("Server is now shutting down. No new connection will be accepted.");
+			}
+			else {
+				if (cmd.equalsIgnoreCase("joke-mode") || cmd.equalsIgnoreCase("proverb-mode") || cmd.equalsIgnoreCase("maintenance-mode")) {
+					JokeServer.mode = cmd;
+					System.out.println("Server is switching to " + cmd + ".");
+					out.println("Server is switching to " + cmd + ".");
+				}
+				if (cmd.equalsIgnoreCase("shutdown")) {
+					JokeServer.controlSwitch = false;
+					System.out.println("Server is shutting down.");
+					out.println("Server is shutting down.");
+				}
+			}
+			
+			sock.close();
+		} catch (IOException ioe) {System.out.println(ioe);}
+	}
+}
+
+class AdminLooper implements Runnable {
+	
+	//public static boolean adminControlSwitch = true;
+	
+	public void run(){ // Running the Admin listen loop
+	
+		int q_len = 6; /* Number of requests for OpSys to queue */
+		int port = 2565;  // We are listening at a different port for Admin clients
+		Socket sock;
+		try{
+			ServerSocket servsock = new ServerSocket(port, q_len);
+			System.out.println("AdminLooper starting up, listening at port " + port + " for JokeClientAdmin.");
+			
+			while (JokeServer.controlSwitch) {
+				// wait for the next ADMIN client connection:
+				sock = servsock.accept();
+				new AdminWorker (sock).start(); 
+			}
+		}catch (IOException ioe) {System.out.println(ioe);}
+	}
+}
+
+public class JokeServer {
+
+	public static boolean controlSwitch = true; // This is the flag to control server shutdown. Only message from Admin Client can change this flag.
+	public static String mode = "joke-mode";
+	public static String[] jokes = {
+			"Joke A - XNAME asked God for a bike, but XNAME know God doesn't work that way. So XNAME stole a bike and asked God for forgiveness.",
+			"Joke B - XNAME want to die peacefully in the sleep, like XNAME's grandfather... Not screaming and yelling like the passengers in his car.",
+			"Joke C - XNAME, do not argue with an idiot. He will drag you down to his level and beat you with experience.",
+			"Joke D - If you think nobody cares you, XNAME, try missing a couple of payments.",
+			"Joke E - Never, XNAME, under any cirumstances, take a sleeping pill and a laxative on the same night.",	
+	};
+	public static String[] proverbs = {
+			"Proverb A - By other's faults, wise men correct their own. By XNAME",
+			"Proverb B - Conquer of fear of death and you are put into possession of your life. By XNAME",
+			"Proverb C - Fame like a river is narrowest at its source and broadest afar off. By XNAME",
+			"Proverb D - Govern your thoughts when alone, and your tongue when in company. By XNAME",
+			"Proverb E - Idle folks have most labour. By XNAME",
+	};
+	
+	public static void main(String[] args) throws IOException {
+		
+		AdminLooper AL = new AdminLooper(); // create a thread for AdminClient connection
+	    Thread t = new Thread(AL);
+	    t.start();  // ...and start it, waiting for administration input
+		
+		int q_len = 6;	//The maximum queue length for incoming connection indications (a request to connect) is set to the backlog parameter. If a connection indication arrives when the queue is full, the connection is refused.
+		int port = 1565;
+		Socket sock;
+		ServerSocket servsock = new ServerSocket(port, q_len);
+		System.out.println("Gao Shan's JokeServer starting up, listening at port " + port +" for JokeClient.");
+		
+		while (controlSwitch) {
+			sock = servsock.accept();
+			new Worker(sock).start();
+		}
+
+	}
+
+}
+
+
+
+=====================JokeClient.java======================
+
+
+/*--------------------------------------------------------
+
+1. Name / Date: Gao Shan / Sept. 20, 2014
+
+2. Java version used: jre1.7.0_67
+
+3. Precise command-line compilation examples / instructions:
+
+> javac JokeClient.java
+
+4. Precise examples / instructions to run this program:
+
+In separate shell windows:
+
+> java JokeServer
+> java JokeClient
+> java JokeClientAdmin
+
+All acceptable commands are displayed on the various consoles.
+
+This runs across machines, in which case you have to pass the IP address of
+the server to the clients. For example, if the server is running at
+140.192.1.22 then you would type:
+
+> java JokeClient 140.192.1.22
+> java JokeClientAdmin 140.192.1.22
+
+5. List of files needed for running the program.
+
+ a. checklist-joke.html
+ b. JokeServer.java
+ c. JokeClient.java
+ d. JokeClientAdmin.java
+
+6. Notes:
+
+----------------------------------------------------------*/
+
+import java.io.*;
+import java.net.*;
+
+public class JokeClient {
+	
+	static String jokestat = "00000"; // A string to save status of Joke.
+	static String proverbstat = "00000"; // A string to save status of Proverb.
+	static String clientName = ""; // The name of the JokeClient
+
+	public static void main(String[] args) {
+		String serverName;
+		if (args.length < 1)	// No argument
+			serverName = "localhost";	// Assume server is on localhost
+		else
+			serverName = args[0];	// Here is the remote server address
+		System.out.println("Gao Shan's JokeClient.\n");
+		System.out.println("Using server: " + serverName + ", Port: 1565");
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			do {
+				System.out.print("What's your name? ");
+				System.out.flush ();
+				clientName = in.readLine ();
+			} while (clientName.length()<=0); // An empty name is not allowed!
+			
+			String cmd;
+			do {
+				System.out.print("Input anything to get a joke or proverb, (quit) to end: ");
+				System.out.flush ();
+				cmd = in.readLine ();
+				if (cmd.indexOf("quit") < 0)
+					getMessage(serverName);
+			} while (cmd.indexOf("quit") < 0);
+			
+		System.out.println ("Cancelled by user request.");
+		} catch (IOException x) {x.printStackTrace ();}
+
+	}
+	
+	static void getMessage (String serverName){
+		Socket sock;
+		BufferedReader fromServer;
+		PrintStream toServer;
+		String mode="";
+		String message="";
+		
+		try{
+			sock = new Socket(serverName, 1565);	// Get a connection to server port 1565
+			fromServer = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			toServer = new PrintStream(sock.getOutputStream());
+			
+			// Send a request to server which composed by 3 lines: clientName; joke status; proverb status.
+			toServer.println(clientName);
+			toServer.println(jokestat);
+			toServer.println(proverbstat);
+			toServer.flush();
+			
+			// Response from server composed by 4 lines: mode; joke/proverb; joke status; proverb status.
+			mode = fromServer.readLine().toLowerCase();
+			if (mode != null) {
+				message = fromServer.readLine();
+				jokestat = fromServer.readLine();
+				proverbstat = fromServer.readLine();
+			}
+			
+			//Debug message
+			//System.out.println("Mode: " + mode + "\nJoke Status: " + jokestat + "\nProverb Status: " + proverbstat);
+			
+			System.out.println("Message from server: " + message);
+				
+			sock.close();
+		} catch (IOException x) {
+			System.out.println ("Socket error.");
+			x.printStackTrace ();
+		}
+	}
+
+}
+
+
+
+=====================JokeClientAdmin.java======================
+
+/*--------------------------------------------------------
+
+1. Name / Date: Gao Shan / Sept. 20, 2014
+
+2. Java version used: jre1.7.0_67
+
+3. Precise command-line compilation examples / instructions:
+
+> javac JokeClientAdmin.java
+
+4. Precise examples / instructions to run this program:
+
+In separate shell windows:
+
+> java JokeServer
+> java JokeClient
+> java JokeClientAdmin
+
+All acceptable commands are displayed on the various consoles.
+
+This runs across machines, in which case you have to pass the IP address of
+the server to the clients. For example, if the server is running at
+140.192.1.22 then you would type:
+
+> java JokeClient 140.192.1.22
+> java JokeClientAdmin 140.192.1.22
+
+5. List of files needed for running the program.
+
+ a. checklist-joke.html
+ b. JokeServer.java
+ c. JokeClient.java
+ d. JokeClientAdmin.java
+
+6. Notes:
+
+----------------------------------------------------------*/
+
+import java.io.*;
+import java.net.*;
+
+public class JokeClientAdmin {
+
+	public static void main(String[] args) {
+		String serverName;
+		if (args.length < 1)	// No argument
+			serverName = "localhost";	// Assume server is on localhost
+		else
+			serverName = args[0];	// Here is the remote server address
+		System.out.println("Gao Shan's JokeClientAdmin.\n");
+		System.out.println("Using server: " + serverName + ", Port: 2565");
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			String cmd ="";
+			do {
+				System.out.print("Input a command, (quit) to end: ");
+				System.out.flush();
+				cmd = in.readLine().toLowerCase();
+				if (cmd.equalsIgnoreCase("joke-mode") || cmd.equalsIgnoreCase("proverb-mode") || cmd.equalsIgnoreCase("maintenance-mode") || cmd.equalsIgnoreCase("shutdown") || cmd.equalsIgnoreCase("quit")) {
+					if (!cmd.equalsIgnoreCase("quit")) getMessage(serverName, cmd);
+				}
+				else {
+					System.out.println("Your input is invalid. Please input \"joke-mode\", \"proverb-mode\", \"maintenance-mode\" or \"shutdown\".");
+				}
+				
+			} while (!cmd.equalsIgnoreCase("quit"));
+			
+			System.out.println ("Cancelled by user request.");
+		} catch (IOException x) {x.printStackTrace ();}
+
+	}
+	
+	static void getMessage (String serverName, String cmd){
+		Socket sock;
+		BufferedReader fromServer;
+		PrintStream toServer;
+		String message="";
+		
+		try{
+			sock = new Socket(serverName, 2565);	// Get a connection to server port 2565
+			fromServer = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			toServer = new PrintStream(sock.getOutputStream());
+			
+			// The request from AdminClient is composed by only 1 line which has 4 possible values: 
+			//"joke-mode", "proverb-mode", "maintenance-mode" or "shutdown"
+			toServer.println(cmd);
+			
+			// Response from server composed by 1 line.
+			message = fromServer.readLine().toLowerCase();
+			
+			System.out.println("Message from server: " + message);
+				
+			sock.close();
+		} catch (IOException x) {
+			System.out.println ("Socket error.");
+			x.printStackTrace ();
+		}
+	}
+
+}
+
