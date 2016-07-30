@@ -1,0 +1,126 @@
+<html>
+<head> <title> Shan's Mimer Discussion </title>
+</head>
+<body>
+<FONT FACE="Cambria" SIZE=3>
+
+<center> <H1> Shan's Mimer Discussion </H1> </center>
+
+<H2> 1. Files in the zip package </H2> 
+<H3>
+<table border="1">
+<tr>
+<td align="center">File name</td>
+<td align="center">Description</td>
+</tr>
+<tr>
+<td>csc435\myDataArray.java</td>
+<td>The source file of myDataArray which shared by MyWebServer.java and BCHandler.java</td>
+</tr>
+<tr>
+<td>BCHandler.java</td>
+<td>The source file of BCHandler which will be invoked by shim.bat for back-end channel communication.</td>
+</tr>
+<tr>
+<td>checklist-mimer.html</td>
+<td>The check-list HTML file.</td>
+</tr>
+<tr>
+<td>mimer-call.html</td>
+<td>The mimer-call HTML file.</td>
+</tr>
+<tr>
+<td>mimer-data.xyz</td>
+<td>The self-developed mimer-data file which has five lines inside.</td>
+</tr>
+<tr>
+<td>mimer-discussion.html</td>
+<td>This file.</td>
+</tr>
+<tr>
+<td>MyWebServer.java</td>
+<td>This source file of MyWebServer.</td>
+</tr>
+<tr>
+<td>serverlog.txt</td>
+<td>This output log of MyWebServer and BCHandler</td>
+</tr>
+<tr>
+<td>shim.bat</td>
+<td>This batch file which will be called by firefox and it will load BCHandler class then.</td>
+<tr>
+<td>xpp3_min-1.1.3.4.O.jar<br>xstream-1.2.1.jar</td>
+<td>The Xstream libraries.</td>
+</tr>
+<tr>
+<td>MyWebServerB.java<br>BCHandlerB.java</td>
+<td>The source files for bragging right version.</td>
+</tr>
+</table>
+</H3>
+
+<H2> 2. My work environment </H2> 
+<H3>
+OS = Windows 7 Professional 64bit<br>
+Browser = FireFox 33<br>
+Java = Oracle JDK 1.7.0_67 - The programs also compatible with Java 1.8<br>
+</H3>
+
+<H2> 3. Steps to make the whole staff work </H2> 
+<H3> 3.1 Extract the zip file to a directory. e.g. C:\Java\Mimer. Then you will have the files listed in 1.</H3>
+<H3> 3.2 Complie java source files. In the C:\Java\Mimer directory:</H3>
+javac -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.O.jar MyWebServer.java <br>
+javac -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.O.jar BCHandler.java <br>
+<H3> 3.3 Start MyWebServer. In the C:\Java\Mimer directory:</H3>
+java -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.O.jar MyWebServer.java <br><br>
+Gao Shan's MyWebServer starting up, listening at port 2540 for browser.<br>
+Backend Channel Looper starting up, listening at port 2570 for BCHandler.<br>
+<H3> 3.4 Modify shim.bat</H3>
+Change the first line with your actual working directory -> @set WORK_DIR=C:\Java\Mimer <br>
+<H3> 3.5 Hack firefox to use shim.bat as the handler for .xyz type of files </H3>
+<li> Open firefox to access http://localhost:2540/mimer-call.html <br>
+<li> Click mimer-data.xyz link on the page. <br>
+<li> Then a dialog will pop-up ask you how to handle .xyz files. <br>
+<li> Select "Open With" <br>
+<li> Ooops! It only allow you to choose *.exe or *.com files as handler! Crap!<br>
+<li> Don't worry, we will hack it later. Now just choose Notepad as the handler and check "Do this automatically for file like this from now on" <br>
+<li> Then Notepad pop-up and opened the five lines .xyz file. <br>
+<li> Go to C:\Users\[Your User]\AppData\Roaming\Mozilla\Firefox\Profiles\[Your Profile]\, open mimeTypes.rdf with a text editor <br>
+<li> Locate lines like this: <br>
+ RDF:Description RDF:about="urn:mimetype:externalApplication:application/xyz"<br>
+ NC:path="C:\Windows\System32\NOTEPAD.exe"<br>
+ NC:prettyName="NOTEPAD.EXE"<br>
+<li> Change C:\Windows\System32\NOTEPAD.exe -> C:\Java\Mimer\shim.bat <br>
+<li> Restart firefox.<br>
+<li> Access http://localhost:2540/mimer-call.html and click mimer-data.xyz link on the page. <br>
+<li> If everything is right, a command line window will pop-up and calls shim.bat. From the console output you can tell if BCHandler be executed successfully or not.
+<H2> 4. More discussion of the processes </H2>
+As I posted in the forum that there are two behaviours after browser download a file to local. <br>
+1. Save File. If you choose this, the file will be saved to the "[user_home]/Download" folder or browser will ask you where to save the file. This can be configured in firefox "Option" -> "General" -> "Downloads". The file downloaded by this way will never be cleaned by browser/system. When you click the downloaded file in the firefox download list, the operating system will take over and decide which program shall be used to handle the file. Just like you double click a file in Windows Explorer.
+<br>
+2. Open With. If you choose this, the file will be saved to the "Temp" folder and firefox will directly invoke the handler program and passes the full path of the downloaded file as the first argument. The "Temp" folder varies between systems, use "set" command in Windows command line to check. By default, it is "C:\Users\[Your_User]\AppData\Local\Temp" in Windows7 and "/tmp" for most of the Linuxes. Notice that the browser or the system will clean the folder constantly.
+<br><br>
+I think the Mimer assignment asks us to do like the 2nd way. So the steps in 3.5 are to achive this.<br>
+The steps to change Windows registry, use assoc / ftype command to associate a handler for a specific file type are not necessary here. So I didn't do any of them.<br>
+
+<H2> 5. Bragging Right </H2>
+<H3> MyWebServerB will use a random port for BCHandlerB to connect. When MyWebServerB starts, it will use a random port to serve the back-end
+channel connection. And it will write the server_ip and server_port information to mimer-data-random.xyz file. Then later BCHandlerB will read
+the information and use them to connect back to server. Pretty simple. Following are the steps how to make it work.</H3>
+<li> Stop MyWebServer.<br>
+<li> Compile MyWebServerB.java and BCHandlerB.java. In the C:\Java\Mimer folder:<br>
+javac -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.O.jar MyWebServerB.java <br>
+javac -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.O.jar BCHandlerB.java <br>
+<li> Start MyWebServerB. In the C:\Java\Mimer folder:<br>
+java -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.O.jar MyWebServerB <br>
+Gao Shan's MyWebServer starting up, listening at port 2540 for browser.<br>
+Backend Channel Looper starting up, listening at random port 2562 for BCHandler.<br>
+Writing server_ip and server_port information to mimer-data-random.xyz<br>
+<li> Modify shim.bat and simply change MyWebServer to MyWebServerB. Nothing else.
+<li> Access http://localhost:2540/mimer-call.html and click mimer-data-random.xyz link on the page.
+<li> If everything is right, a command line window will pop-up and calls shim.bat then BCHandlerB be executed and use the random port connect back to server.
+<li> On the server console, you can see the XML information being send back and de-serialized.
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</FONT>
+</body></html>
