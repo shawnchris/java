@@ -1,0 +1,59 @@
+==================Logs of MyWebServer================
+D:\eclipse\workspace\Mimer>d:\Java\jdk1.7.0_67\bin\java -cp .;xstream-1.2.1.jar;xpp3_min-1.1.3.4.Oar MyWebServer
+
+
+Gao Shan's MyWebServer starting up, listening at port 2540 for browser.
+Backend Channel Looper starting up, listening at port 2570 for BCHandler.
+Sun Oct 19 21:22:54 CDT 2014 [127.0.0.1:56486] GET /mimer-call.html HTTP/1.1
+Sun Oct 19 21:22:54 CDT 2014 [127.0.0.1:56486] /mimer-call.html - 200 OK
+Sun Oct 19 21:22:55 CDT 2014 [127.0.0.1:56486] GET /mimer-data.xyz HTTP/1.1
+Sun Oct 19 21:22:55 CDT 2014 [127.0.0.1:56486] /mimer-data.xyz - 200 OK
+The XML input is:
+<cs435.myDataArray>
+  <num__lines>5</num__lines>
+  <lines>
+    <string>One partridge in a pear tree</string>
+    <string>Two turtle doves</string>
+    <string>Three French hens</string>
+    <string>Four calling birds</string>
+    <string>Five golden rings</string>
+  </lines>
+</cs435.myDataArray>
+
+The convert result is:
+num_lines: 5
+lines:
+One partridge in a pear tree
+Two turtle doves
+Three French hens
+Four calling birds
+Five golden rings
+
+==================Logs of shim.bat and BCHandler================
+C:\Program Files (x86)\Mozilla Firefox>java -classpath D:\eclipse\workspace\Mimer;D:\eclip
+se\workspace\Mimer\xstream-1.2.1.jar;D:\eclipse\workspace\Mimer\xpp3_min-1.1.3.4.O.jar BCH
+andler C:\Users\Shawn\AppData\Local\Temp\mimer-data.xyz
+
+Shan's Backend Channel Client starting up.
+Opening C:\Users\Shawn\AppData\Local\Temp\mimer-data.xyz
+
+The converted output is:
+<cs435.myDataArray>
+  <num__lines>5</num__lines>
+  <lines>
+    <string>One partridge in a pear tree</string>
+    <string>Two turtle doves</string>
+    <string>Three French hens</string>
+    <string>Four calling birds</string>
+    <string>Five golden rings</string>
+  </lines>
+</cs435.myDataArray>
+
+Writing the result to C:\Users\Shawn\AppData\Local\Temp\output.xml
+
+Connecting to server: 127.0.0.1 on port: 2570
+
+Everything is done! Have a nice day!
+
+C:\Program Files (x86)\Mozilla Firefox>pause
+Press any key to continue...
