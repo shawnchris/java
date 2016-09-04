@@ -13,9 +13,6 @@ public class A392_Is_Subsequence {
 				j++;
 			}
 			j++;
-			// if (j < t.length()) {
-			// j++;
-			// }
 		}
 
 		if (i == s.length() && j <= t.length())
