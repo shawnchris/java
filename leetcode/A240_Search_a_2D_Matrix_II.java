@@ -1,7 +1,7 @@
 package leetcode;
 
-public class A240_Search_a_2D_MatrixII {
-	// O(M+N) solution: Every time the upper-right element is the special one: 
+public class A240_Search_a_2D_Matrix_II {
+    // O(M+N) solution: Every time the upper-right element is the special one: 
 	// all elements less than it are at its left side and all elements greater than it are behind.
     public boolean searchMatrix(int[][] matrix, int target) {
 		if (matrix == null)
@@ -22,10 +22,4 @@ public class A240_Search_a_2D_MatrixII {
 	    }
 	    return false;
 	}
-    
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
