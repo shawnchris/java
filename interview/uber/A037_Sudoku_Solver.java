@@ -42,8 +42,7 @@ public class A037_Sudoku_Solver {
     	int box = (row / 3) * 3 + (col / 3);
     	
     	if (preset[row][col]) {
-    		if (solve(board, preset, level + 1)) return true;
-    		return false;
+    		return solve(board, preset, level + 1);
     	}
     	
     	for (int i = 0; i < 9; i++) {
