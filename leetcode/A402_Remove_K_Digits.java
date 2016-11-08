@@ -41,6 +41,47 @@ public class A402_Remove_K_Digits {
         return sb.toString();
         
     }
+    public String removeKdigits2(String num, int k) {
+        if (k >= num.length()) return "0";
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(num.charAt(0));
+        
+        int i = 1;
+        while (k > 0) {
+            int curr = i >= num.length() ? -1 : Integer.parseInt(num.charAt(i) + "");
+            if (sb.length() == 0) {
+                sb.append(curr);
+                i++;
+            }
+            else {
+                if (Integer.parseInt(sb.charAt(sb.length() - 1) + "") > curr) {
+                    sb.deleteCharAt(sb.length() - 1);
+                    k--;
+                }
+                else {
+                    sb.append(curr);
+                    i++;
+                }
+            }
+        }
+        
+        if (i < num.length()) {
+            sb.append(num.substring(i, num.length()));
+        }
+        
+        while (sb.length() > 0 && sb.charAt(0) == '0') {
+            sb.deleteCharAt(0);
+        }
+        
+        if (sb.length() > 0) {
+            return sb.toString();
+        }
+        else {
+            return "0";
+        }
+    }
+    
 	public static void main(String[] args) {
 		A402_Remove_K_Digits rk = new A402_Remove_K_Digits();
 		String num1 = "1432219";
