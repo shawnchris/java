@@ -5,6 +5,44 @@ import java.util.*;
 * If another point (x3, y3) is in the same line, then A * x3 + B * y3 = 0.
 */
 public class A149_Max_Points_on_a_Line {
+    public int maxPoints2(Point[] points) {
+        // Hold one point p[i], iterate through all other points p[j] (i != j) and calc slope[j]
+        // If slope[j1] = slope[j2], those two points are in a line.
+        // Also need to handle p[j] overlaps with p[i]
+        if (points == null) return 0;
+        int n = points.length;
+        if (n <= 2) return n;
+        
+        int result = 0;
+        for (int i = 0; i < n - 1; i++) {
+            int overlap = 0, max = 0;
+            Map<Long, Integer> map = new HashMap<>();
+            for (int j = i + 1; j < n; j++) {
+                int x = points[i].x - points[j].x;
+                int y = points[i].y - points[j].y;
+                // Overlap
+                if (x == 0 && y == 0) {
+                    overlap++;
+                    continue;
+                }
+                int gcd = calcGCD(x, y);
+                x = x / gcd;
+                y = y / gcd;
+                long key = (long)x << 31 + y;
+                int value = map.getOrDefault(key, 0) + 1;
+                max = Math.max(max, value);
+                map.put(key, value);
+            }
+            result = Math.max(result, max + overlap + 1);
+        }
+        
+        return result;
+    }
+    
+    private int calcGCD(int a, int b) {
+        if (b == 0) return a;
+        return calcGCD(b, a % b);
+    }
 	public int maxPoints(Point[] points) {
         if (points == null) return 0;
         int len = points.length;
