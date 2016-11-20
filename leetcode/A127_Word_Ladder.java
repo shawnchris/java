@@ -29,7 +29,7 @@ public class A127_Word_Ladder {
         				if (wordList.contains(next) && !used.contains(next)) {
         					used.add(next);
         					queue.add(next);
-        					System.out.println("Step: " + step + " next: " + next);
+        					//System.out.println("Step: " + step + " next: " + next);
         				}
         			}
         		}
