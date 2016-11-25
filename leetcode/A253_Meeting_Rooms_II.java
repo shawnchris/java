@@ -55,12 +55,15 @@ public class A253_Meeting_Rooms_II {
         for (int i = 1; i < intervals.length; i++) {
             Interval itv = queue.poll();
             if (itv.end <= intervals[i].start) {
+            	// If interval on the top (earliest end) overlaps with interval[i], merge to one interval
             	itv.end = intervals[i].end;
             }
             else {
+            	// Otherwise add interval to queue.
             	queue.add(intervals[i]);
             }
             queue.add(itv);
+            // All intervals in queue are overlapping with each other.
         }
         
         return queue.size();
