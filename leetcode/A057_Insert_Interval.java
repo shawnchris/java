@@ -2,6 +2,68 @@ package leetcode;
 import java.util.*;
 
 public class A057_Insert_Interval {
+	private int coverage = 0;
+    private TreeMap<Integer, Integer> map = new TreeMap<>();
+    
+    private void insert(Interval itv) {
+        coverage += (itv.end - itv.start);
+        
+        Integer floorKey = map.floorKey(itv.start);
+        if (floorKey != null) {
+            int prevEnd = map.get(floorKey);
+            if (prevEnd >= itv.start) {
+                if (prevEnd >= itv.end) {
+                    coverage -= (itv.end - itv.start);
+                }
+                else {
+                    coverage -= (prevEnd - itv.start);
+                }
+                itv.start = floorKey;
+                itv.end = Math.max(itv.end, prevEnd);
+                map.remove(floorKey);
+            }
+        }
+        
+        while (true) {
+            Integer ceilingKey = map.ceilingKey(itv.start);
+            if (ceilingKey == null || ceilingKey > itv.end) break;
+            int nextEnd = map.get(ceilingKey);
+            if (nextEnd <= itv.end) {
+                coverage -= (nextEnd - ceilingKey);
+            }
+            else {
+                coverage -= (itv.end - ceilingKey);
+            }
+            itv.end = Math.max(itv.end, nextEnd);
+            map.remove(ceilingKey);
+        }
+        
+        map.put(itv.start, itv.end);
+    }
+    
+    private int getCoverage() {
+        return coverage;
+    }
+    
+    private List<Interval> getIntervals() {
+        List<Interval> result = new ArrayList<>();
+        for (int start : map.keySet()) {
+            result.add(new Interval(start, map.get(start)));
+        }
+        return result;
+    }
+    
+    public List<Interval> insert2(List<Interval> intervals, Interval newInterval) {
+        for (Interval itv : intervals) {
+            insert(itv);
+            System.out.println(getCoverage());
+        }
+        insert(newInterval);
+        System.out.println(getCoverage());
+        
+        return getIntervals();
+    }
+	
     public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
         List<Interval> result = new ArrayList<>();
         if (intervals == null) {
