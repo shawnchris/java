@@ -34,23 +34,6 @@ public class A457_Circular_Array_Loop {
         return next;
 	}
     
-    private boolean hasLoop(int[] nums, int start) {
-        int steps = 0, next = -1;
-        while (next != start) {
-            steps++;
-            if (steps == 1) next = start;
-            next = (next + nums[next]) % nums.length;
-            if (next < 0) next += nums.length;
-            if (next == start) {
-                if (steps == 1) return false;
-                else return true;
-            }
-            if (nums[next] == 0) return false;
-            if (nums[next] * nums[start] < 0) return false;
-        }
-        return true;
-    }
-    
 	public static void main(String[] args) {
 		A457_Circular_Array_Loop cal = new A457_Circular_Array_Loop();
 		System.out.println(cal.circularArrayLoop(new int[] {2, -1, -1, 1, 4})); //true
