@@ -2,35 +2,28 @@ package leetcode;
 import java.util.*;
 
 public class A163_Missing_Ranges {
-    public static List<String> findMissingRanges(int[] nums, int lower, int upper) {
-        List<String> result = new ArrayList<>();
-        long left = lower;
+	public static List<String> findMissingRanges(int[] nums, int lower, int upper) {
+        List<String> result = new ArrayList<String>();
+        long start = lower;
+        
         if (nums != null && nums.length != 0) {
-            left = Math.min(lower, nums[0]);
             for (int i = 0; i < nums.length; i++) {
-                if (i != 0 && nums[i] == nums[i - 1]) continue;
-                if (nums[i] == left) {
-                    left++;
-                    continue;
+                if (start < nums[i]) {
+                    insertRange(start, nums[i] - 1, result);
                 }
-                insertRange(left, nums[i] - 1, result);
-                left = (long)nums[i] + 1;
+                start = (long)nums[i] + 1;
             }
         }
         
-        if (left <= upper) insertRange(left, upper, result);
+        if (start <= upper) insertRange(start, upper, result);
         
         return result;
     }
     
-    private static void insertRange(long left, int right, List<String> result) {
-    	if (left > right) return;
-        if (right == left) {
-            result.add(left + "");
-        }
-        else {
-            result.add(left + "->" + right);
-        }
+    private static void insertRange(long start, int end, List<String> result) {
+        if (start > end) return;
+        if (start == end) result.add(start + "");
+        else result.add(start + "->" + end);
     }
     
 	public static void main(String[] args) {
