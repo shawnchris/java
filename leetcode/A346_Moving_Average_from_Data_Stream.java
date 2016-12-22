@@ -1,24 +1,24 @@
 package leetcode;
 
 public class A346_Moving_Average_from_Data_Stream {
-	class MovingAverage {
-	    int[] buf;
-	    int size, ptr = 0, sum = 0, count = 0;
+	public class MovingAverage {
+	    int capacity = 0, index = 0, total = 0, sum = 0;
+	    int[] array;
+	    
 	    /** Initialize your data structure here. */
 	    public MovingAverage(int size) {
-	        this.size = size;
-	        buf = new int[size];
+	        capacity = size;
+	        array = new int[size];
 	    }
 	    
 	    public double next(int val) {
-	        sum -= buf[ptr];
+	        if (total < capacity) total++;
+	        sum -= array[index];
 	        sum += val;
-	        buf[ptr] = val;
-	        ptr++;
-	        if (ptr >= size) ptr = 0;
-	        count++;
-	        if (count > size) count = size;
-	        return (double)sum / count;
+	        array[index] = val;
+	        index = (index + 1) % capacity;
+	        
+	        return (double)sum / total;
 	    }
 	}
 }
