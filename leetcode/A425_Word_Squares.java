@@ -116,6 +116,7 @@ public class A425_Word_Squares {
     	}
     	List<String> candidates = map.get(prefix);
     	if (candidates == null) return;
+    	
     	for (String s : candidates) {
     		current.add(s);
     		dfs(len, level + 1, current, map, result);
