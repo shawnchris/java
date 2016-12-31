@@ -23,7 +23,7 @@ There may be multiple valid order of letters, return any one of them is fine.
 public class L269_Alien_Dictionary {
 	// Topological sort - Kahn's Algorithm
 	public String alienOrder(String[] words) {
-        if(words == null || words.length == 0) {
+		if(words == null || words.length == 0) {
             return "";
         }
         Map<Character, Set<Character>> graph = new HashMap<>();
@@ -38,6 +38,7 @@ public class L269_Alien_Dictionary {
         for (int k = 1; k < words.length; k++) {
             String preStr = words[k - 1];
             String curStr = words[k];
+            boolean diff = false;
             for (int i = 0; i < Math.min(preStr.length(), curStr.length()); i++) {
                 char preChar = preStr.charAt(i);
                 char curChar = curStr.charAt(i);
@@ -49,9 +50,11 @@ public class L269_Alien_Dictionary {
                         inDegree[curChar - 'a']++;
                     }                    
                     graph.get(preChar).add(curChar);
+                    diff = true;
                     break;
                 }
             }
+            if (!diff && preStr.length() > curStr.length()) return "";
         }
         Queue<Character> queue = new LinkedList<>();
         for (int i = 0; i < inDegree.length; i++) {
