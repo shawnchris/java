@@ -33,10 +33,16 @@ public class A288_Unique_Word_Abbreviation {
 	public static void main(String[] args) {
 		A288_Unique_Word_Abbreviation uwa = new A288_Unique_Word_Abbreviation();
 		//["igprlgmj","xyitppjcakbxzsgntet"]
+		String[] dict = {"hello","hallo","hello","zzzg","akvzveklsk","pfziulaweuudrr","jccd","jrvzwkufpmze","cwfvhh","elmjdcysa","tdokjqfvrfjbwb","silsrnnvold","vqh","qyqnua","emwydo","aiehnrev","mplvtbipycf","cyxyde","ldyr","gtuvflak","xahpmzaj","pnb","wjneqv","hjh","crqw","uscswjlgemxqpp","mpnwvjgfrpzxjyxtasp","uwayurfgopyogumfm","ncbmyrbfejger","lozobnm","mwzfsezjkfvuumh","wxhkgtlqfvdto"};
+		ValidWordAbbr vw = uwa.new ValidWordAbbr(dict);
+		System.out.println(vw.isUnique("hallo"));
+		System.out.println(vw.isUnique("xyitppjcakbxzsgntet"));
+		/*
 		String[] dict = {"pelnlwwkfa","ayyrq","may","zzzg","akvzveklsk","pfziulaweuudrr","jccd","jrvzwkufpmze","cwfvhh","elmjdcysa","tdokjqfvrfjbwb","silsrnnvold","vqh","qyqnua","emwydo","aiehnrev","mplvtbipycf","cyxyde","ldyr","gtuvflak","xahpmzaj","pnb","wjneqv","hjh","crqw","uscswjlgemxqpp","mpnwvjgfrpzxjyxtasp","uwayurfgopyogumfm","ncbmyrbfejger","lozobnm","mwzfsezjkfvuumh","wxhkgtlqfvdto"};
 		ValidWordAbbr vw = uwa.new ValidWordAbbr(dict);
 		System.out.println(vw.isUnique("igprlgmj"));
 		System.out.println(vw.isUnique("xyitppjcakbxzsgntet"));
+		*/
 	}
 
 }
