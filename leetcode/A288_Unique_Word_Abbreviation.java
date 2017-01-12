@@ -9,7 +9,7 @@ public class A288_Unique_Word_Abbreviation {
 	        for (String word : dictionary) {
 	            String abb = getAbbreviation(word);
 	            if (map.containsKey(abb)) {
-	                if (!map.get(abb).equals(word)) { // duplicate
+	                if (!map.get(abb).equals(word)) { // more than 1 word
 	                    map.put(abb, "");
 	                }
 	            }
