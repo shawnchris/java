@@ -1,74 +1,89 @@
 package leetcode;
+import java.util.*;
 
 public class A488_Zuma_Game {
-	public static int findMinStep(String board, String hand) {
-		if (board == null || board.length() == 0) return 0;
-		
-        char[] ball = {'R', 'Y', 'B', 'G', 'W'};
-        String[] pattern = {"RR", "YY", "BB", "GG", "WW"};
-        int[] count = new int[5];
-        int left = hand.length();
-        
-        for (int i = 0; i < hand.length(); i++) {
-        	char c = hand.charAt(i);
-        	if (c == 'R') count[0]++;
-        	else if (c == 'Y') count[1]++;
-        	else if (c == 'B') count[2]++;
-        	else if (c == 'G') count[3]++;
-        	else if (c == 'W') count[4]++;
+	public int findMinStep(String board, String hand) {
+        List<Character> boardList = new ArrayList<Character>();
+        for (char c : board.toCharArray()) {
+            boardList.add(c);
         }
-        
-        while (left > 0) {
-        	// Search for reduce balls
-        	String shortest = board;
-        	int j = 0;
-        	for (int i = 0; i < 5; i++) {
-        		if (count[i] <= 0) continue;
-        		int index = 0;
-        		while (index >= 0 && index < board.length()) {
-        			index = board.indexOf(pattern[i], index);
-        			if (index < 0) continue;
-        			String r = reduce(board.substring(0, index) + ball[i] + board.substring(index));
-        			if (r.length() < shortest.length()) {
-        				shortest = r;
-        				j = i;
-        			}
-        			index++;
-        		}
-        	}
-        	if (shortest.length() < board.length()) {
-        		count[j]--;
-        		board = shortest;
-        		if (board.length() == 0)
-        			return hand.length() - left - 1;
-        	}
-        	else {
-        		for (int i = 0; i < board.length(); i++) {
-        			char c = board.charAt(i);
-        			if (c == 'R' && count[0] > 0 || c == 'Y' && count[1] > 0
-        					|| c == 'B' && count[2] > 0 || c == 'G' && count[3] > 0
-        					|| c == 'W' && count[4] > 0) { 
-        				shortest = board.substring(0, i) + c + board.substring(i);
-        				break; 
-        			}
-        		}
-        		if (shortest.length() == board.length()) return -1;
-        	}
-        	left--;
+        Map<Character,Integer> handMap = new HashMap<>();
+        handMap.put('R',0);
+        handMap.put('Y',0);
+        handMap.put('B',0);
+        handMap.put('G',0);
+        handMap.put('W',0);
+        for (char h : hand.toCharArray()) {
+            handMap.put(h, handMap.get(h) + 1);
         }
-		
-		return -1;
+        return find(boardList, handMap);
     }
-	
-	private static String reduce(String s) {
-		return s;
-	}
+    
+    private int find(List<Character> board, Map<Character, Integer> hand) {
+        cleanupBoard(board);
+        if (board.size() == 0) return 0;
+        if (empty(hand)) return -1;
+        int count = 0;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i<board.size(); i++) {
+            char c = board.get(i);
+            count++;
+            if (i == board.size() - 1 || board.get(i+1) != c) {
+                int missing = 3 - count;
+                if (hand.get(c) >= missing) {
+                    hand.put(c, hand.get(c) - missing);
+                    List<Character> smallerBoard = new ArrayList<>(board);
+                    for (int j = 0; j<count; j++) {
+                        smallerBoard.remove(i-j);
+                    }
+                    int smallerFind = find(smallerBoard, hand);
+                    if ( smallerFind != -1 ) {
+                        min = Math.min(smallerFind + missing, min);
+                    }
+                    hand.put(c, hand.get(c) + missing);
+                }
+                count = 0;
+            }
+        }
+        return (min == Integer.MAX_VALUE) ? -1 : min;
+    }
+    
+    private void cleanupBoard(List<Character> board) {
+        int count = 0;
+        boolean cleaned = false;
+        for (int i = 0; i<board.size(); i++) {
+            char c = board.get(i);
+            count++;
+            if (i == board.size() - 1 || board.get(i+1) != c) {
+                if (count >= 3) {
+                    for (int j = 0; j<count; j++) {
+                        board.remove(i-j);
+                    }
+                    cleaned = true;
+                    break;
+                }
+                count = 0;
+            }
+        }
+        if (cleaned) {
+            cleanupBoard(board);
+        }
+    }
+    
+    private boolean empty(Map<Character,Integer> hand) {
+        for (int val : hand.values()) {
+            if (val > 0) return false;
+        }
+        return true;
+    }
+    
 	public static void main(String[] args) {
-		System.out.println(findMinStep("", ""));
-		System.out.println(findMinStep("WRRBBW", "RB"));
-		System.out.println(findMinStep("WWRRBBWW", "WRBRW"));
-		System.out.println(findMinStep("G", "GGGGG"));
-		System.out.println(findMinStep("RBYYBBRRB", "YRBGB"));
+		A488_Zuma_Game zg = new A488_Zuma_Game();
+		System.out.println(zg.findMinStep("", ""));
+		System.out.println(zg.findMinStep("WRRBBW", "RB"));
+		System.out.println(zg.findMinStep("WWRRBBWW", "WRBRW"));
+		System.out.println(zg.findMinStep("G", "GGGGG"));
+		System.out.println(zg.findMinStep("RBYYBBRRB", "YRBGB"));
 	}
 
 }
