@@ -14,12 +14,11 @@ public class UnionFind {
     }
     
     public int find(int p) {
-        int q = parent[p];
-        while (q != parent[q]) {
-            q = parent[q];
+    	while (p != parent[p]) {
+            parent[p] = parent[parent[p]];    // path compression by halving
+            p = parent[p];
         }
-        parent[p] = q;
-        return q;
+        return p;
     }
     
     public void union(int p, int q) {
