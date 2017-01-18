@@ -10,11 +10,11 @@ public class A067_Add_Binary {
         
         while (i >= 0 || j >= 0 || sum > 0) {
             if (i >= 0) {
-                sum += Integer.parseInt(a.substring(i, i + 1));
+                sum += a.charAt(i) - '0';
                 i--;
             }
             if (j >= 0) {
-                sum += Integer.parseInt(b.substring(j, j + 1));
+                sum += b.charAt(j) - '0';
                 j--;
             }
             sb.append(sum % 2);
