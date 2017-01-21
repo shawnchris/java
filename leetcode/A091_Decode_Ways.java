@@ -1,6 +1,39 @@
 package leetcode;
 
 public class A091_Decode_Ways {
+	/*
+	 * DP solution. dp[i] stands for ways of decoding end with s[i - 1];
+	 * if s[i - 1] = '0'
+	 *     i = 1 || s[i - 2] != '1' && s[i - 2] != '2' => return 0;
+	 *     => dp[i] = dp[i - 2];
+	 * else
+	 *     9 < num[i - 2, i - 1] < 27 => dp[i] = dp[i - 2] + dp[i - 1];
+	 *     => dp[i] = dp[i - 1]
+	 */
+	public int numDecodings2(String s) {
+        if (s == null || s.length() == 0 || s.charAt(0) == '0') return 0;
+        
+        int[] dp = new int[s.length() + 1];
+        dp[0] = 1; dp[1] = 1;
+        
+        for (int i = 2; i <= s.length(); i++) {
+            char c = s.charAt(i - 1);
+            if (c == '0') {
+                if (s.charAt(i - 2) != '1' && s.charAt(i - 2) != '2') return 0;
+                dp[i] = dp[i - 2];
+            }
+            else {
+                if (s.charAt(i - 2) == '1' || s.charAt(i - 2) == '2' && c < '7') {
+                    dp[i] = dp[i - 2] + dp[i - 1];
+                }
+                else {
+                    dp[i] = dp[i - 1];
+                }
+            }
+        }
+        
+        return dp[s.length()];
+    }
     public int numDecodings(String s) {
         // Corner cases
         if (s.startsWith("0") || s.length() < 1)
