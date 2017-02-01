@@ -1,136 +1,120 @@
 package leetcode;
-import java.util.*;
-
-class LRS {
-    // return the longest common prefix of s and t
-    public static String lcp(String s, String t) {
-        int n = Math.min(s.length(), t.length());
-        for (int i = 0; i < n; i++) {
-            if (s.charAt(i) != t.charAt(i))
-                return s.substring(0, i);
-        }
-        return s.substring(0, n);
-    }
-
-    // return the longest repeated string in s
-    public static String lrs(String s) {
-
-        // form the N suffixes
-        int n  = s.length();
-        String[] suffixes = new String[n];
-        for (int i = 0; i < n; i++) {
-            suffixes[i] = s.substring(i, n);
-        }
-
-        // sort them
-        Arrays.sort(suffixes);
-
-        // find longest repeated substring by comparing adjacent sorted suffixes
-        String lrs = "";
-        for (int i = 0; i < n-1; i++) {
-            String x = lcp(suffixes[i], suffixes[i+1]);
-            if (x.length() > lrs.length())
-                lrs = x;
-        }
-        return lrs;
-    }
-}
 
 public class A471_Encode_String_with_Shortest_Length {
-	Map<String, String> encodeMap;
+/*
+ * dp[i][j] = string from index i to index j in encoded form. We can write the following formula as:-
+ * dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j]) or if we can find some pattern in string from i to j 
+ * which will result in more less length.
+ */
+	
+	public String encode2(String s) {
+		int len = s.length();
+		String[][] dp = new String[len][len];
+		
+		for (int l = 0; l < len; l++) { // length from 0 to len - 1
+			for (int i = 0; i < len - l; i++) { // start of substr from 0 to len - l
+				int j = i + l; // end of substr
+				String substr = s.substring(i, j + 1);
+				dp[i][j] = substr;
+				
+				// no way to shorten
+				if (l < 4) continue;
+				
+				// try different combination of existing dp strings
+				for (int k = i; k < j; k++) {
+					if (dp[i][k].length() + dp[k + 1][j].length() < dp[i][j].length()) {
+						dp[i][j] = dp[i][k] + dp[k + 1][j];
+					}
+				}
+				
+				// try to find new pattern
+				for (int k = 0; k < substr.length(); k++) {
+					String pattern = substr.substring(0, k + 1);
+					if (pattern.length() != 0 && substr.length() % pattern.length() == 0
+						&& substr.replaceAll(pattern, "").length() == 0) {
+						String ss = substr.length() / pattern.length() + "[" + dp[i][i + k] + "]";
+						if (ss.length() < dp[i][j].length()) {
+							dp[i][j] = ss;
+						}
+					}
+				}
+			}
+		}
+		
+		return dp[0][s.length() - 1];
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public String encode(String s) {
+		String[][] dp = new String[s.length()][s.length()];
 
+		for (int l = 0; l < s.length(); l++) {
+			for (int i = 0; i < s.length() - l; i++) {
+				int j = i + l;
+				String substr = s.substring(i, j + 1);
+				// Checking if string length < 5. In that case, we know that encoding will not help.
+				if (j - i < 4) {
+					dp[i][j] = substr;
+				} else {
+					dp[i][j] = substr;
+					// Loop for trying all results that we get after dividing
+					// the strings into 2 and combine the results of 2 substrings
+					for (int k = i; k < j; k++) {
+						if ((dp[i][k] + dp[k + 1][j]).length() < dp[i][j].length()) {
+							dp[i][j] = dp[i][k] + dp[k + 1][j];
+						}
+					}
 
-    public String encode(String s) {
-        encodeMap = new HashMap<>();
-        return encodeImpl(s);
-    }
+					// Loop for checking if string can itself found some pattern
+					// in it which could be repeated.
+					for (int k = 0; k < substr.length(); k++) {
+						String repeatStr = substr.substring(0, k + 1);
+						if (repeatStr != null && substr.length() % repeatStr.length() == 0
+								&& substr.replaceAll(repeatStr, "").length() == 0) {
+							String ss = substr.length() / repeatStr.length() + "[" + dp[i][i + k] + "]";
+							if (ss.length() < dp[i][j].length()) {
+								dp[i][j] = ss;
+							}
+						}
+					}
+				}
+			}
+		}
 
-    private String encodeImpl(String s) {
-        if (s.isEmpty()) {
-            return "";
-        }
-        if (encodeMap.containsKey(s)) {
-            return encodeMap.get(s);
-        }
-        String answer = s;
-        int n = s.length();
-        for (int prefixLen = 1; prefixLen < n; prefixLen++) {
-            String prefix = s.substring(0, prefixLen);
-            String suffix = s.substring(prefixLen);
-            String encodePrefix = encodeImpl(prefix);
-            String encodeSuffix = encodeImpl(suffix);
-            String result = encodePrefix + encodeSuffix;
+		return dp[0][s.length() - 1];
+	}
 
-            if (result.length() < answer.length()) {
-                answer = result;
-            }
-            String realPrefix = encodePrefix;
-            int count = 1;
-            while (suffix.startsWith(prefix)) {
-                realPrefix += encodePrefix;
-                suffix = suffix.substring(prefixLen);
-                count++;
-                encodeSuffix = encodeImpl(suffix);
-                result = realPrefix + encodeSuffix;
-                if (result.length() < answer.length()) {
-                    answer = result;
-                }
-                result = count + "[" + encodePrefix + "]" + encodeSuffix;
-                if (result.length() < answer.length()) {
-                    answer = result;
-                }
-            }
-        }
-        encodeMap.put(s, answer);
-        return answer;
-    }
-    
-    public String encode2(String s) {
-    	int l = s.length();
-        String[][] DP = new String[l][l + 1];
-        for (int i = 0; i < l; i++) {
-        	for (int j = 0; j < l + 1; j++) {
-        		DP[i][j] = "";
-        	}
-        }
-        mDP(DP, s, 0, l);
-        return DP[0][l];
-    }
-    
-    private void mDP(String[][] DP, String s,int i, int j){
-        DP[i][j]=s.substring(i,j);
-        //first loop
-        for (int k = 1; k < j; k++) {
-            if (j % k == 0) {
-                boolean fine = true;
-                for(int kk = 1; kk < j / k ; kk++){
-                    if(!(s.substring(i, k) == s.substring(i + kk * k, k))){
-                        fine=false;
-                        break;
-                    }
-                }
-                if (fine) {
-                    if (DP[i][k].length() == 0) mDP(DP, s, i, k);
-                    for (int kk = 1; kk < j / k; kk++) DP[i + kk*k][k] = DP[i][k];
-                    if (DP[i][j].length() > String.valueOf(j / k).length() + 2 + DP[i][k].length()) {
-                        DP[i][j] = String.valueOf(j / k) + "[" + DP[i][k] + "]";
-                    }
-                }
-            }
-        }
-        //second loop
-        for(int k = 1; k < j; k++) {
-            if (DP[i][k].length() == 0) mDP(DP, s, i, k);
-            if (DP[i+k][j-k].length() == 0) mDP(DP,s,i+k,j-k);
-            if (DP[i][j].length() > DP[i][k].length() + DP[i+k][j-k].length()) {
-                DP[i][j] = DP[i][k] + DP[i+k][j-k];
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new A471_Encode_String_with_Shortest_Length().encode("abbbabbbcabbbabbbc"));
-        System.out.println(new A471_Encode_String_with_Shortest_Length().encode2("abbbabbbcabbbabbbc"));
-    }
+	public static void main(String[] args) {
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode("aaaa"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode2("aaaa"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode("aaaaa"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode2("aaaaa"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode("aabcaabcd"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode2("aabcaabcd"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode("abbbabbbcabbbabbbc"));
+		System.out.println(new A471_Encode_String_with_Shortest_Length().encode2("abbbabbbcabbbabbbc"));
+	}
 
 }
