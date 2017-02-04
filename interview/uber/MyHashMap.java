@@ -50,6 +50,9 @@ public class MyHashMap<K, V> {
 		if (node.next != null) {
 			node.next.prev = node.prev;
 		}
+		
+		node.prev = null;
+		node.next = null;
 		return node.value;
 	}
 	

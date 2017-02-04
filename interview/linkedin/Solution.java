@@ -124,6 +124,20 @@ public class Solution {
 		//System.out.println(myPow2(2.0, 3));
 		//System.out.println(myPow(3.0, 8));
 		//System.out.println(myPow2(3.0, 8));
+		PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		pq.add(3);
+		pq.add(1);
+		pq.add(2);
+		pq.add(4);
+		pq.add(5);
+		
+		while (!pq.isEmpty()) {
+			System.out.println(pq.poll());
+		}
 	}
 
 }

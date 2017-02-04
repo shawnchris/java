@@ -2,7 +2,7 @@ package interview.uber;
 /*
  * Given two strings S and T, determine if they are both one edit distance apart.
  * Hint:
- * 1. If | n – m | is greater than 1, we know immediately both are not one-edit
+ * 1. If | n ï¿½ m | is greater than 1, we know immediately both are not one-edit
  *    distance apart.
  * 2. It might help if you consider these cases separately, m == n and m != n.
  * 3. Assume that m is always <= n, which greatly simplifies the conditional 

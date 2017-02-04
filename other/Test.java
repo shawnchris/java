@@ -87,6 +87,25 @@ public class Test {
 		System.out.println(type2);
 		System.out.println(type4);
 		System.out.println(type1);
+		
+		int[] a = {5, 7, 7, 8, 8, 8, 10};
+	    System.out.println(Arrays.binarySearch(a, 8));
+	    System.out.println(Arrays.binarySearch(a, 0, 7, 8));
+	    System.out.println(Arrays.binarySearch(a, 0, 6, 8));
+	    int[] a2 = {5, 7, 7, 8, 8, 10};
+		System.out.println(Arrays.binarySearch(a2, 8));
+		
+		System.out.println(-5 % 5);
+		
+		System.out.println(0xffffffff >>> 1);
+		System.out.println(0b11111111);
+		System.out.println(0377);
+		
+		System.out.println(Math.log(Integer.MAX_VALUE) / Math.log(62));
+		String s = "http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=192506&extra=page%3D1%26filter%3Dsortid%26sortid%3D311%26searchoption%5B3046%5D%5Bvalue%5D%3D6%26searchoption%5B3046%5D%5Btype%5D%3Dradio%26sortid%3D311";
+		System.out.print(s.length());
+		
+		System.out.println(Long.MAX_VALUE);
 	}
 	
 }
