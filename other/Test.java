@@ -105,7 +105,13 @@ public class Test {
 		String s = "http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=192506&extra=page%3D1%26filter%3Dsortid%26sortid%3D311%26searchoption%5B3046%5D%5Bvalue%5D%3D6%26searchoption%5B3046%5D%5Btype%5D%3Dradio%26sortid%3D311";
 		System.out.print(s.length());
 		
+		System.out.println(Integer.MAX_VALUE);
 		System.out.println(Long.MAX_VALUE);
+		
+		String ss = "ab";
+		System.out.println(ss.substring(2));
+		//System.out.println(ss.substring(3));
+		
 	}
 	
 }
