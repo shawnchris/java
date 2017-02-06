@@ -62,6 +62,45 @@ public class A329_Longest_Increasing_Path_in_a_Matrix {
         
         return level;
     }
+    
+    // Memory search
+    private static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    public int longestIncreasingPath2(int[][] matrix) {
+    	if (matrix == null) return 0;
+        int m = matrix.length;
+        if (m == 0) return 0;
+        int n = matrix[0].length;
+        if (n == 0) return 0;
+        
+        int[][] cache = new int[m][n];
+        
+        int result = 0;
+        for (int i = 0; i < m; i++) {
+        	for (int j = 0; j < n; j++) {
+        		int len = search(matrix, cache, i, j);
+        		result = Math.max(result, len);
+        	}
+        }
+        
+        return result;
+    }
+    
+    private int search(int[][] matrix, int[][] cache, int i, int j) {
+    	if (cache[i][j] == 0) {
+    		int max = 1;
+    		for (int[] d : dirs) {
+    			int r = i + d[0];
+    			int c = j + d[1];
+    			if (r < 0 || r >= matrix.length || c < 0 || c >= matrix[0].length
+        				|| matrix[i][j] <= matrix[r][c]) continue;
+    			int len = search(matrix, cache, r, c) + 1;
+    			max = Math.max(max, len);
+    		}
+    		cache[i][j] = max;
+    	}
+    	return cache[i][j];
+    }
+    
 	public static void main(String[] args) {
 		int[][] nums1 = {
 				  {9,9,4},
@@ -71,11 +110,13 @@ public class A329_Longest_Increasing_Path_in_a_Matrix {
 		int[][] nums2 = {
 				  {3,4,5},
 				  {3,2,6},
-				  {2,2,1}
+				  {2,2,7}
 				};
 		A329_Longest_Increasing_Path_in_a_Matrix li = new A329_Longest_Increasing_Path_in_a_Matrix();
 		System.out.println(li.longestIncreasingPath(nums1));
+		System.out.println(li.longestIncreasingPath2(nums1));
 		System.out.println(li.longestIncreasingPath(nums2));
+		System.out.println(li.longestIncreasingPath2(nums2));
 	}
 
 }
