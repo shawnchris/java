@@ -19,9 +19,37 @@ public class A341_Flatten_Nested_List_Iterator {
 		// Return null if this NestedInteger holds a single integer
 		public List<NestedInteger> getList();
 	}
-
-	// O(n) memory solution
+	
+	// Stack solution
 	public class NestedIterator implements Iterator<Integer> {
+	    Stack<NestedInteger> stack;
+	    
+	    public NestedIterator(List<NestedInteger> nestedList) {
+	        stack = new Stack<NestedInteger>();
+	        for (int i = nestedList.size() - 1; i >= 0; i--) {
+	            stack.push(nestedList.get(i));
+	        }
+	    }
+
+	    @Override
+	    public Integer next() {
+	        return stack.pop().getInteger();
+	    }
+
+	    @Override
+	    public boolean hasNext() {
+	        while (!stack.isEmpty() && !stack.peek().isInteger()) {
+	            List<NestedInteger> nestedList = stack.pop().getList();
+	            for (int i = nestedList.size() - 1; i >= 0; i--) {
+	                stack.push(nestedList.get(i));
+	            }
+	        }
+	        return !stack.isEmpty();
+	    }
+	}
+	
+	// O(n) memory solution
+	public class NestedIterator1 implements Iterator<Integer> {
 		private List<Integer> list;
 		private int total, current;
 
@@ -35,7 +63,7 @@ public class A341_Flatten_Nested_List_Iterator {
 			}
 		}
 
-		public NestedIterator(List<NestedInteger> nestedList) {
+		public NestedIterator1(List<NestedInteger> nestedList) {
 			list = new ArrayList<Integer>();
 			current = 0;
 			for (NestedInteger ni : nestedList) {
