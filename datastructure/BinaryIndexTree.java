@@ -70,6 +70,13 @@ class BITree2D {
 				update(i, j, input[i][j]);
 			}
 		}
+		
+		for (int i = 0; i < tree.length; i++) {
+            for (int j = 0; j < tree.length; j++) {
+                System.out.print(tree[i][j] + " ");
+            }
+            System.out.println();
+        }
 	}
 	
 	public void update(int row, int col, int value) {
