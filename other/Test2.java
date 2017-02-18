@@ -1,6 +1,63 @@
 package other;
 import java.util.*;
 
+interface MyStream extends Iterator<Integer> {
+	Iterator<Integer> iterator();
+}
+
+class StreamWrapper implements Comparable<StreamWrapper>, Iterator<Integer> {
+	Integer next = null;
+	Iterator<Integer> iterator;
+	
+	public StreamWrapper (MyStream stream) {
+		iterator = stream.iterator();
+		if (iterator.hasNext()) {
+			next = iterator.next();
+		}
+	}
+	
+	public boolean hasNext() {
+		return next != null;
+	}
+	
+	public Integer next() {
+		Integer result = next;
+		if (iterator.hasNext()) {
+			next = iterator.next();
+		}
+		else {
+			next = null;
+		}
+		return result;
+	}
+	
+	public int compareTo(StreamWrapper that) {
+		return this.next - that.next;
+	}
+}
+
+class StreamIterator implements Iterator<Integer> {
+	PriorityQueue<StreamWrapper> pq;
+	public StreamIterator(MyStream s1, MyStream s2) {
+		StreamWrapper sw1 = new StreamWrapper(s1);
+		StreamWrapper sw2 = new StreamWrapper(s2);
+		pq = new PriorityQueue<>();
+		if (sw1.hasNext()) pq.add(sw1);
+		if (sw2.hasNext()) pq.add(sw2);
+	}
+	
+	public boolean hasNext() {
+		return !pq.isEmpty();
+	}
+	
+	public Integer next() {
+		StreamWrapper top = pq.poll();
+		Integer result = top.next();
+		if (top.hasNext()) pq.add(top);
+		return result;
+	}
+}
+
 public class Test2 {
 
 	public static void main(String[] args) {
@@ -27,6 +84,8 @@ public class Test2 {
 		for (String s : ss) {
 			System.out.println(s.trim().matches(pattern));
 		}
+		
+		Float.parseFloat("");
 	}
 
 }
