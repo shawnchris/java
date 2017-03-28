@@ -1,4 +1,5 @@
 package other;
+import java.io.*;
 import java.util.*;
 
 interface MyStream extends Iterator<Integer> {
@@ -85,7 +86,11 @@ public class Test2 {
 			System.out.println(s.trim().matches(pattern));
 		}
 		
-		Float.parseFloat("");
+		//Float.parseFloat("");
+		
+		int[][] a = new int[10][0];
+		System.out.println(a[0].length);
+		
 	}
 
 }
