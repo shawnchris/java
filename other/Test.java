@@ -110,7 +110,7 @@ public class Test {
 		
 		String ss = "ab";
 		System.out.println(ss.substring(2));
-		//System.out.println(ss.substring(3));
+		System.out.println(Long.MAX_VALUE);
 		
 	}
 	
