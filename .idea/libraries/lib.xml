@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/depaul/csc435/Mimer/xstream-1.4.7/lib/xstream-benchmark-1.4.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/depaul/csc435/Mimer/xstream-1.4.7/lib/xstream-hibernate-1.4.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/depaul/csc435/Mimer/xstream-1.4.7/lib/xstream-1.4.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
