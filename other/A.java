@@ -1,68 +1,69 @@
 package other;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-interface IF1 {
-	default void print() {
-		System.out.println("IF1");
-	}
-}
+public class A {
 
-class IF1Impl implements IF1 {
-	
-}
 
-class Invoice {
-   public static String formatId(String oldId) {
-      return oldId + "_Invoice";
-   }
-}
-
-class SalesInvoice extends Invoice {
-   public static String formatId(String oldId) {
-      return oldId + "_SalesInvoice";
-   }
-}
-
-public class A{
-    static int total = 10;
-    public void call() {
-        int total = 5;
-        System.out.println(this.total);
-    }
-    public static void main (String args []) {
-        A a1 = new A();
-        a1.call();
-        
-        Supplier<String> i = () -> "Car";
-        Consumer<String> c = x -> System.out.print(x.toLowerCase());
-        Consumer<String> d = x -> System.out.print(x.toUpperCase());
-        c.andThen(d).accept(i.get());
+    public static void main (String[] args) {
         System.out.println();
-        
-	   String first = "first";
-	   String second = new String("first");
-	   "first".concat("second");
-	   System.out.println(first.equals(second));
-	   System.out.println(first == second);
-	   System.out.println(first.equals("firstsecond"));
-	   System.out.println(second == "first");
-	   
-	   System.out.println("Current JVM Heap Size:" + Runtime.getRuntime().totalMemory());
-	   System.out.println("Maximum JVM Heap Size:" + Runtime.getRuntime().maxMemory());
-	   System.out.println("Free JVM Heap Size:" + Runtime.getRuntime().freeMemory());
-	   
-	   Invoice invoice = new SalesInvoice();
-	   System.out.println(invoice.formatId("1234"));
-	   
-	   Invoice invoice1 = new Invoice();
-	   System.out.println(invoice1.formatId("1234"));
-	   
-	   SalesInvoice invoice2 = new SalesInvoice();
-	   System.out.println(Invoice.formatId("1234"));
-	   
-	   SalesInvoice invoice3 = new SalesInvoice();
-	   System.out.println(invoice3.formatId("1234"));
+        System.out.println(Integer.MAX_VALUE);
+
+        A a = new A();
+
+        a.tryStream();
+    }
+
+    private void tryStream() {
+        List<POLineItem> poModel = new ArrayList<>();
+        poModel.add(new POLineItem(1, "1"));
+        poModel.add(new POLineItem(2, "2"));
+        poModel.add(new POLineItem(3, "3"));
+
+        Map<Long, POLineItem> purchaseOrderLineItems = poModel
+                .stream()
+                .collect(Collectors.toMap(POLineItem::getLineNumber, Function.identity()));
+
+        Set<Long> set = new HashSet<Long>();
+
+        Arrays.asList(poModel.stream().mapToLong(a -> a.getLineNumber()).toArray());
+
+
+
+        for (long l : poModel.stream().mapToLong(a -> a.getLineNumber()).toArray()) set.add(l);
+
+        for (Map.Entry<Long, POLineItem> entry : purchaseOrderLineItems.entrySet()) {
+            System.out.println("key: " + entry.getKey() + ", value: " + entry.getValue());
+        }
+
+        for (long l : set) {
+            System.out.println("key: " + l);
+        }
+    }
+
+    class POLineItem {
+        private long lineNumber;
+        private String name;
+        public POLineItem() {
+            this.lineNumber = 0;
+            this.name = "";
+        };
+        public POLineItem(long lineNumber, String name) {
+            this.lineNumber = lineNumber;
+            this.name = name;
+        };
+
+        public long getLineNumber() {
+            return lineNumber;
+        }
+        public String getName() {
+            return name;
+        }
+        @Override
+        public String toString() {
+            return "lineNumber: " + lineNumber + ", name: " + name;
+        }
     }
 }
