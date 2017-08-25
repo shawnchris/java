@@ -2,7 +2,7 @@ package leetcode;
 
 import java.util.Arrays;
 
-public class A_561_Array_Partition_I {
+public class A561_Array_Partition_I {
     public int arrayPairSum(int[] nums) {
         Arrays.sort(nums);
         int result = 0;
