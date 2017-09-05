@@ -40,5 +40,4 @@ public class A638_Shopping_Offers {
     }
     return sum;
   }
-  //what?
 }
