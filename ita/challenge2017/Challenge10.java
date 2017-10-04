@@ -136,10 +136,159 @@ public class Challenge10 {
     }
   }
 
+  static int max = 0;
+  static int[] cache = new int[10001];
+  static int mod = 1000000000;
+  static void drawLine(int[] lines) {
+    if (max == 0) cache[0] = 1;
+    for (int line : lines) {
+      if (max < line) {
+        for (int i = max + 1; i <= line; i++) {
+          cache[i] = (cache[i - 1] + i) % mod;
+        }
+        max = line;
+      }
+      System.out.println(cache[line]);
+    }
+  }
+
+  static class UnionFind {
+    private int count = 0;
+    private int[] parent, rank;
+
+    public UnionFind(int n) {
+      count = n;
+      parent = new int[n];
+      rank = new int[n];
+      for (int i = 0; i < n; i++) {
+        parent[i] = i;
+      }
+    }
+
+    public int find(int p) {
+      while (p != parent[p]) {
+        parent[p] = parent[parent[p]];    // path compression by halving
+        p = parent[p];
+      }
+      return p;
+    }
+
+    public void union(int p, int q) {
+      int rootP = find(p);
+      int rootQ = find(q);
+      if (rootP == rootQ) return;
+      if (rank[rootQ] > rank[rootP]) {
+        parent[rootP] = rootQ;
+      }
+      else {
+        parent[rootQ] = rootP;
+        if (rank[rootP] == rank[rootQ]) {
+          rank[rootP]++;
+        }
+      }
+      count--;
+    }
+
+    public int count() {
+      return count;
+    }
+  }
+  static int zombieClusters(int[][] zombies) {
+    int n = zombies.length;
+    UnionFind uf = new UnionFind(n);
+
+    for (int i = 0; i < zombies.length; i++) {
+      for (int j = 0; j < zombies.length; j++) {
+        if (i != j && zombies[i][j] == 1) {
+          uf.union(i, j);
+        }
+      }
+    }
+
+    return uf.count;
+  }
+
+  static class Neighbor {
+    int id; int weight;
+    public Neighbor(int i, int w) {this.id = i; this.weight = w;}
+  }
+  static int matchTokens(int nodes, int[] from, int[] to, int[] weight) {
+    Map<Integer, List<Neighbor>> graph = new HashMap<>();
+    int n = from.length;
+    for (int i = 0; i < n; i++) {
+      List<Neighbor> nFrom = graph.getOrDefault(from[i], new ArrayList<>());
+      List<Neighbor> nTo = graph.getOrDefault(to[i], new ArrayList<>());
+      nFrom.add(new Neighbor(to[i], weight[i]));
+      nTo.add(new Neighbor(from[i], weight[i]));
+      graph.put(from[i], nFrom);
+      graph.put(to[i], nTo);
+    }
+
+    int maxPaths = 0;
+    Map<Integer, List<int[]>> pathToNodes = new HashMap<>();
+    for (int i = 1; i <= nodes; i++) {
+      for (int j = i + 1; j <= nodes; j++) {
+        int paths = 0;
+        for (Neighbor neighbor : graph.get(i)) {
+          Set<Integer> visited = new HashSet<>();
+          visited.add(i);
+          if (hasPath(graph, visited, neighbor.id, j, neighbor.weight)) paths++;
+        }
+        maxPaths = Math.max(maxPaths, paths);
+
+        List<int[]> list = pathToNodes.getOrDefault(paths, new ArrayList<>());
+        list.add(new int[] {i, j});
+        pathToNodes.put(paths, list);
+      }
+    }
+
+    int res = 0;
+    for (int[] pair : pathToNodes.get(maxPaths)) {
+      res = Math.max(res, pair[0] * pair[1]);
+    }
+    return res;
+  }
+  static boolean hasPath(Map<Integer, List<Neighbor>> graph,
+      Set<Integer> visited, int from, int to, int weight) {
+    if (from == to) return true;
+    if (visited.contains(from)) return false;
+
+    visited.add(from);
+    for (Neighbor neighbor : graph.get(from)) {
+      if (neighbor.weight == weight && hasPath(graph, visited, neighbor.id, to, weight)) {
+        return true;
+      }
+    }
+    visited.remove(from);
+
+    return false;
+  }
+
   public static void main(String[] args) {
-    String[] s1 = {"tom likes rose", "jim likes mary", "nobody likes me"};
-    String[] q1 = {"tom", "likes", "him"};
-    textQueries(s1, q1);
+    // String[] s1 = {"jim likes mary", "kate likes tom", "tom does not like jim"};
+    // String[] q1 = {"jim tom", "likes"};
+    // String[] s2 = {"how it was done", "are you how", "it goes to", "goes done are it"};
+    // String[] q2 = {"done it", "it"};
+    // String[] s3 = {"it go will away", "go do art", "what to will east"};
+    // String[] q3 = {"it will", "go east will", "will"};
+    // textQueries(s1, q1);
+    // textQueries(s2, q2);
+    // textQueries(s3, q3);
+
+    // int[] l1 = {3, 2, 4, 10000, 9999};
+    // drawLine(l1);
+
+    // int[][] z1 = {
+    //     {1,1,0,0},
+    //     {1,1,1,0},
+    //     {0,1,1,0},
+    //     {0,0,0,1}};
+    // System.out.println(zombieClusters(z1));
+
+    int[] from1 = {1, 1, 2, 2, 2};
+    int[] to1 = {2, 2, 3, 3, 4};
+    int[] weight1 = {1, 2, 1, 3, 3};
+    System.out.println(matchTokens(4, from1, to1, weight1));
   }
 
 }
