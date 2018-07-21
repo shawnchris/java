@@ -34,7 +34,7 @@ public class Search {
     }
 
 
-    public ArrayList<Integer> postorderTraversal(TreeNode root) {
+    public ArrayList<Integer> postOrderTraversal(TreeNode root) {
         ArrayList<Integer> result = new ArrayList<Integer>();
         Stack<TreeNode> stack = new Stack<TreeNode>();
         TreeNode prev = null; // previously traversed node
