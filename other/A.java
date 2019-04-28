@@ -26,8 +26,7 @@ public class A {
         return res;
     }
 
-    public int longestArithSeqLength(int set[])
-    {
+    public int longestArithSeqLength(int set[]) {
         int n = set.length;
         if (n <= 2) return n;
 
@@ -49,24 +48,19 @@ public class A {
             L[i][n - 1] = 2;
 
         // Consider every element as second element of AP
-        for (int j = n - 2; j >= 1; j--)
-        {
+        for (int j = n - 2; j >= 1; j--) {
             // Search for i and k for j
-            int i = j -1 , k = j + 1;
-            while (i >= 0 && k <= n - 1)
-            {
+            int i = j - 1, k = j + 1;
+            while (i >= 0 && k <= n - 1) {
                 if (set[i] + set[k] < 2 * set[j])
                     k++;
 
                     // Before changing i, set L[i][j] as 2
-                else if (set[i] + set[k] > 2 * set[j])
-                {
-                    L[i][j] = 2; i--;
+                else if (set[i] + set[k] > 2 * set[j]) {
+                    L[i][j] = 2;
+                    i--;
 
-                }
-
-                else
-                {
+                } else {
                     // Found i and k for j, LLAP with i and j as first two
                     // elements is equal to LLAP with j and k as first two
                     // elements plus 1. L[j][k] must have been filled
@@ -78,7 +72,8 @@ public class A {
 
                     // Change i and k to fill
                     // more L[i][j] values for current j
-                    i--; k++;
+                    i--;
+                    k++;
                 }
             }
 
@@ -86,8 +81,7 @@ public class A {
             // to k becoming more than
             // n-1, set the remaining
             // entties in column j as 2
-            while (i >= 0)
-            {
+            while (i >= 0) {
                 L[i][j] = 2;
                 i--;
             }
@@ -100,6 +94,7 @@ public class A {
         mem[1] = false;
         return helper(N, mem);
     }
+
     private boolean helper(int N, Boolean[] mem) {
         if (mem[N] == null) {
             for (int i = 1; i < N; i++) {
@@ -119,6 +114,7 @@ public class A {
         Queue<int[]> queue = parse(S);
         return construct(queue, 0);
     }
+
     private TreeNode construct(Queue<int[]> queue, int depth) {
         if (queue.isEmpty()) {
             return null;
@@ -135,13 +131,14 @@ public class A {
 
         return node;
     }
+
     private Queue<int[]> parse(String S) {
         Queue<int[]> queue = new ArrayDeque<>();
         int i = 0, j = 0, k = 0;
         while (i < S.length()) {
             k = j;
             while (k < S.length() && S.charAt(k) != '-') k++;
-            queue.add(new int[] {j - i, Integer.parseInt(S.substring(j, k))});
+            queue.add(new int[]{j - i, Integer.parseInt(S.substring(j, k))});
 
             i = k;
             j = k;
@@ -154,9 +151,6 @@ public class A {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         A a = new A();
-        System.out.println(a.toNegativeBase(2, -2));
-        System.out.println(a.toNegativeBase(3, -2));
-        System.out.println(a.toNegativeBase(4, -2));
     }
 
     public int orangesRotting(int[][] A) {
@@ -213,7 +207,8 @@ public class A {
         int m = A.length, n = A[0].length;
         Queue<Integer> queue = new ArrayDeque<>();
         Set<Integer> visited = new HashSet<>();
-        queue.add(0); visited.add(0);
+        queue.add(0);
+        visited.add(0);
 
         int step = 0;
         int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -361,6 +356,6 @@ public class A {
     // method to calculate gcd of two numbers
     static int gcd(int a, int b) {
         if (a == 0) return b;
-        return gcd(b%a,a);
+        return gcd(b % a, a);
     }
 }
