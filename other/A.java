@@ -3,154 +3,43 @@ package other;
 import java.util.*;
 
 public class A {
-    public int maxAncestorDiff(TreeNode root) {
-        Integer left = root.left == null ? null : dfs(root.left, root.val, root.val);
-        Integer right = root.right == null ? null : dfs(root.right, root.val, root.val);
-        if (left == null) {
-            return right;
-        } else if (right == null) {
-            return left;
-        } else {
-            return Math.max(left, right);
-        }
-    }
 
-    private int dfs(TreeNode root, int min, int max) {
-        int res = Math.max(Math.abs(root.val - min), Math.abs(root.val - max));
-        if (root.left != null) {
-            res = Math.max(res, dfs(root.left, Math.min(root.val, min), Math.max(root.val, max)));
-        }
-        if (root.right != null) {
-            res = Math.max(res, dfs(root.right, Math.min(root.val, min), Math.max(root.val, max)));
-        }
-        return res;
-    }
-
-    public int longestArithSeqLength(int set[]) {
-        int n = set.length;
-        if (n <= 2) return n;
-
-        // Create a table and initialize all
-        // values as 2. The value ofL[i][j] stores
-        // LLAP with set[i] and set[j] as first two
-        // elements of AP. Only valid entries are
-        // the entries where j>i
-        int L[][] = new int[n][n];
-
-        // Initialize the result
-        int llap = 2;
-
-        // Fill entries in last column as 2.
-        // There will always be two elements in
-        // AP with last number of set as second
-        // element in AP
-        for (int i = 0; i < n; i++)
-            L[i][n - 1] = 2;
-
-        // Consider every element as second element of AP
-        for (int j = n - 2; j >= 1; j--) {
-            // Search for i and k for j
-            int i = j - 1, k = j + 1;
-            while (i >= 0 && k <= n - 1) {
-                if (set[i] + set[k] < 2 * set[j])
-                    k++;
-
-                    // Before changing i, set L[i][j] as 2
-                else if (set[i] + set[k] > 2 * set[j]) {
-                    L[i][j] = 2;
-                    i--;
-
-                } else {
-                    // Found i and k for j, LLAP with i and j as first two
-                    // elements is equal to LLAP with j and k as first two
-                    // elements plus 1. L[j][k] must have been filled
-                    // before as we run the loop from right side
-                    L[i][j] = L[j][k] + 1;
-
-                    // Update overall LLAP, if needed
-                    llap = Math.max(llap, L[i][j]);
-
-                    // Change i and k to fill
-                    // more L[i][j] values for current j
-                    i--;
-                    k++;
-                }
-            }
-
-            // If the loop was stopped due
-            // to k becoming more than
-            // n-1, set the remaining
-            // entties in column j as 2
-            while (i >= 0) {
-                L[i][j] = 2;
-                i--;
-            }
-        }
-        return llap;
-    }
-
-    public boolean divisorGame(int N) {
-        Boolean[] mem = new Boolean[N + 1];
-        mem[1] = false;
-        return helper(N, mem);
-    }
-
-    private boolean helper(int N, Boolean[] mem) {
-        if (mem[N] == null) {
-            for (int i = 1; i < N; i++) {
-                if (N % i == 0) {
-                    if (!helper(N - i, mem)) {
-                        mem[N] = true;
-                        break;
-                    }
-                }
-            }
-            mem[N] = false;
-        }
-        return mem[N];
-    }
-
-    public TreeNode recoverFromPreorder(String S) {
-        Queue<int[]> queue = parse(S);
-        return construct(queue, 0);
-    }
-
-    private TreeNode construct(Queue<int[]> queue, int depth) {
-        if (queue.isEmpty()) {
-            return null;
-        }
-        if (queue.peek()[0] != depth) {
-            return null;
-        }
-
-        int[] n = queue.poll();
-        TreeNode node = new TreeNode(n[1]);
-
-        node.left = construct(queue, depth + 1);
-        node.right = construct(queue, depth + 1);
-
-        return node;
-    }
-
-    private Queue<int[]> parse(String S) {
-        Queue<int[]> queue = new ArrayDeque<>();
-        int i = 0, j = 0, k = 0;
-        while (i < S.length()) {
-            k = j;
-            while (k < S.length() && S.charAt(k) != '-') k++;
-            queue.add(new int[]{j - i, Integer.parseInt(S.substring(j, k))});
-
-            i = k;
-            j = k;
-            while (j < S.length() && S.charAt(j) == '-') j++;
-        }
-        return queue;
-    }
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         A a = new A();
+    }
+
+    public int fromNegativeBase(String str, int negBase) {
+        int res = 0;
+        for (int i = 0; i < str.length(); i++) {
+            res += Integer.valueOf(str.substring(str.length() - i - 1, str.length() - i)) * Math.pow(negBase, i);
+        }
+        return res;
+    }
+
+    public String toNegativeBase(int n, int negBase) {
+        //  If n is zero then in any base it will be 0 only
+        if (n == 0) return "0";
+
+        String converted = "";
+        while (n != 0) {
+            // Get remainder by negative base, it can be negative also
+            int remainder = n % negBase;
+            n /= negBase;
+
+            // if remainder is negative, add abs(base) to it and add 1 to n
+            if (remainder < 0) {
+                remainder += (-negBase);
+                n += 1;
+            }
+
+            // convert remainder to string add into the result
+            converted = remainder + converted;
+        }
+
+        return converted;
     }
 
     public int orangesRotting(int[][] A) {
@@ -257,6 +146,12 @@ public class A {
         System.out.println();
     }
 
+    private void print(int[][] a) {
+        for (int[] b : a) {
+            print(b);
+        }
+    }
+
     static class TreeNode {
         int val;
         TreeNode left;
@@ -357,5 +252,13 @@ public class A {
     static int gcd(int a, int b) {
         if (a == 0) return b;
         return gcd(b % a, a);
+    }
+
+    static boolean colLine(int x1, int y1, int x2, int y2, int x3, int y3) {
+        if ((y3 - y2) * (x2 - x1) ==
+                (y2 - y1) * (x3 - x2))
+            return true;
+        else
+            return false;
     }
 }

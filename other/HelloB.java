@@ -5,7 +5,7 @@ public class HelloB extends HelloA {
 	}
 
 	{
-		System.out.println("I’m B class");
+		System.out.println("I'm B class");
 	}
 	static {
 		System.out.println("static B");
@@ -24,7 +24,7 @@ class HelloA {
 	}
 
 	{
-		System.out.println("I’m A class");
+		System.out.println("I'm A class");
 	}
 	static {
 		System.out.println("static A");
