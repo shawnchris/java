@@ -4,11 +4,12 @@ import java.util.*;
 
 public class A {
 
-
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         A a = new A();
+        System.out.println(a);
+
     }
 
     public int fromNegativeBase(String str, int negBase) {
@@ -246,6 +247,16 @@ public class A {
             return count;
         }
 
+    }
+
+    static class TrieNode {
+        private static final int R = 26;
+        public TrieNode[] next;
+        public int isWord;
+        public TrieNode() {
+            next = new TrieNode[R];
+            isWord = 0;
+        }
     }
 
     // method to calculate gcd of two numbers
