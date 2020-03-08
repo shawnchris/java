@@ -259,6 +259,13 @@ public class A {
         }
     }
 
+    private void printArray(int[] a) {
+        for (int i = 0; i < a.length; i++) {
+            System.out.print(a[i] + "\t");
+        }
+        System.out.println();
+    }
+
     // method to calculate gcd of two numbers
     static int gcd(int a, int b) {
         if (a == 0) return b;
