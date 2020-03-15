@@ -3,6 +3,73 @@ package other;
 import java.util.*;
 
 public class A {
+    public String generateTheString(int n) {
+        StringBuilder sb = new StringBuilder();
+        if (n % 2 == 0) {
+            for (int i = 0; i < n - 1; i++) {
+                sb.append('a');
+            }
+            sb.append('b');
+        } else {
+            for (int i = 0; i < n; i++) {
+                sb.append('a');
+            }
+        }
+        return sb.toString();
+    }
+
+    public int numTimesAllBlue(int[] light) {
+        int res = 0, yellow = 0;
+        // 0 - off, 1 - yellow, 2 - blue
+        int[] bulbs = new int[50000];
+        for (int l : light) {
+            if (l == 1 || bulbs[l - 2] == 2) {
+                bulbs[l - 1] = 2;
+                yellow -= turnToBlue(bulbs, l);
+            } else {
+                bulbs[l - 1] = 1;
+                yellow++;
+            }
+            if (yellow == 0) {
+                res++;
+            }
+        }
+        return res;
+    }
+    private int turnToBlue(int[] bulbs, int index) {
+        int res = 0;
+        while (index < bulbs.length && bulbs[index] != 0) {
+            bulbs[index] = 2;
+            res++;
+            index++;
+        }
+        return res;
+    }
+
+    public int numOfMinutes(int total, int headID, int[] manager, int[] informTime) {
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < manager.length; i++) {
+            List<Integer> list = map.getOrDefault(manager[i], new ArrayList<>());
+            list.add(i);
+            map.put(manager[i], list);
+        }
+        int res = 0;
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[] {headID, 0});
+        while (!queue.isEmpty()) {
+            int[] e = queue.poll();
+            res = Math.max(e[1], res);
+
+            List<Integer> next = map.get(e[0]);
+            if (next == null) {
+                continue;
+            }
+            for (int n : next) {
+                queue.add(new int[] {n, e[1] + informTime[e[0]]});
+            }
+        }
+        return res;
+    }
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
