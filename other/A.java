@@ -3,79 +3,62 @@ package other;
 import java.util.*;
 
 public class A {
-    public String generateTheString(int n) {
+    public List<String> stringMatching(String[] words) {
+        Arrays.sort(words, (a, b) -> a.length() - b.length());
+        List<String> res = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            String s1 = words[i];
+            for (int j = i + 1; j < words.length; j++) {
+                if (words[j].contains(s1)) {
+                    res.add(s1);
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
+    public String entityParser(String text) {
+        Map<String, String> map = new HashMap<>();
+        map.put("&quot;", "\"");
+        map.put("&apos;", "'");
+        map.put("&amp;", "&");
+        map.put("&gt;", ">");
+        map.put("&lt;", "<");
+        map.put("&frasl;", "/");
+
         StringBuilder sb = new StringBuilder();
-        if (n % 2 == 0) {
-            for (int i = 0; i < n - 1; i++) {
-                sb.append('a');
-            }
-            sb.append('b');
-        } else {
-            for (int i = 0; i < n; i++) {
-                sb.append('a');
-            }
-        }
-        return sb.toString();
-    }
-
-    public int numTimesAllBlue(int[] light) {
-        int res = 0, yellow = 0;
-        // 0 - off, 1 - yellow, 2 - blue
-        int[] bulbs = new int[50000];
-        for (int l : light) {
-            if (l == 1 || bulbs[l - 2] == 2) {
-                bulbs[l - 1] = 2;
-                yellow -= turnToBlue(bulbs, l);
-            } else {
-                bulbs[l - 1] = 1;
-                yellow++;
-            }
-            if (yellow == 0) {
-                res++;
-            }
-        }
-        return res;
-    }
-    private int turnToBlue(int[] bulbs, int index) {
-        int res = 0;
-        while (index < bulbs.length && bulbs[index] != 0) {
-            bulbs[index] = 2;
-            res++;
-            index++;
-        }
-        return res;
-    }
-
-    public int numOfMinutes(int total, int headID, int[] manager, int[] informTime) {
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        for (int i = 0; i < manager.length; i++) {
-            List<Integer> list = map.getOrDefault(manager[i], new ArrayList<>());
-            list.add(i);
-            map.put(manager[i], list);
-        }
-        int res = 0;
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[] {headID, 0});
-        while (!queue.isEmpty()) {
-            int[] e = queue.poll();
-            res = Math.max(e[1], res);
-
-            List<Integer> next = map.get(e[0]);
-            if (next == null) {
+        int i = 0, j = 0;
+        while (i < text.length()) {
+            if (text.charAt(i) != '&') {
+                sb.append(text.charAt(i));
+                i++;
                 continue;
             }
-            for (int n : next) {
-                queue.add(new int[] {n, e[1] + informTime[e[0]]});
+            j = i + 1;
+            while (j < text.length() && text.charAt(j) != ';') {
+                j++;
             }
+            String key;
+            if (j < text.length()) {
+                key = text.substring(i, j + 1);
+            } else {
+                key = text.substring(i, j);
+            }
+            sb.append(map.getOrDefault(key, key));
+
+            i = j + 1;
         }
-        return res;
+
+
+        return sb.toString();
     }
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
+        System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        System.out.println(a);
 
     }
 
