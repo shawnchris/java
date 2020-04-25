@@ -3,56 +3,105 @@ package other;
 import java.util.*;
 
 public class A {
-    public List<String> stringMatching(String[] words) {
-        Arrays.sort(words, (a, b) -> a.length() - b.length());
-        List<String> res = new ArrayList<>();
-        for (int i = 0; i < words.length; i++) {
-            String s1 = words[i];
-            for (int j = i + 1; j < words.length; j++) {
-                if (words[j].contains(s1)) {
-                    res.add(s1);
-                    break;
-                }
+    public String reformat(String s) {
+        ArrayList<Character> s1 = new ArrayList<>();
+        ArrayList<Character> s2 = new ArrayList<>();
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                s1.add(c);
+            } else {
+                s2.add(c);
             }
         }
-        return res;
-    }
 
-    public String entityParser(String text) {
-        Map<String, String> map = new HashMap<>();
-        map.put("&quot;", "\"");
-        map.put("&apos;", "'");
-        map.put("&amp;", "&");
-        map.put("&gt;", ">");
-        map.put("&lt;", "<");
-        map.put("&frasl;", "/");
+        if (s1.size() < s2.size()) {
+            ArrayList<Character> temp = s1;
+            s1 = s2;
+            s2 = temp;
+        }
+
+        if (s1.size() - s2.size() > 1) {
+            return "";
+        }
 
         StringBuilder sb = new StringBuilder();
-        int i = 0, j = 0;
-        while (i < text.length()) {
-            if (text.charAt(i) != '&') {
-                sb.append(text.charAt(i));
-                i++;
-                continue;
+        for (int i = 0; i < s1.size(); i++) {
+            sb.append(s1.get(i));
+            if (i < s2.size()) {
+                sb.append(s2.get(i));
             }
-            j = i + 1;
-            while (j < text.length() && text.charAt(j) != ';') {
-                j++;
-            }
-            String key;
-            if (j < text.length()) {
-                key = text.substring(i, j + 1);
-            } else {
-                key = text.substring(i, j);
-            }
-            sb.append(map.getOrDefault(key, key));
-
-            i = j + 1;
         }
-
 
         return sb.toString();
     }
+
+    public List<List<String>> displayTable(List<List<String>> orders) {
+        Set<String> foods = new HashSet<>();
+        Set<String> tables = new HashSet<>();
+        Map<String, Map<String, Integer>> map = new HashMap<>();
+
+        for (List<String> order : orders) {
+            String table = order.get(1);
+            String food = order.get(2);
+            tables.add(table);
+            foods.add(food);
+            Map<String, Integer> count = map.getOrDefault(table, new HashMap<>());
+            count.put(food, count.getOrDefault(food, 0) + 1);
+            map.put(table, count);
+        }
+
+        List<List<String>> res = new ArrayList<>();
+        List<String> firstRow = new ArrayList<>(foods);
+        Collections.sort(firstRow);
+        firstRow.add(0, "Table");
+        res.add(firstRow);
+
+        List<String> firstCol = new ArrayList<>(tables);
+        Collections.sort(firstCol, (t1, t2) -> Integer.parseInt(t1) - Integer.parseInt(t2));
+        for (String table : firstCol) {
+            List<String> row = new ArrayList<>();
+            row.add(table);
+            Map<String, Integer> count = map.getOrDefault(table, new HashMap<>());
+            for (int i = 1; i < firstRow.size(); i++) {
+                String food = firstRow.get(i);
+                row.add(String.valueOf(count.getOrDefault(food, 0)));
+            }
+            res.add(row);
+        }
+
+        return res;
+    }
+
+    public int minNumberOfFrogs(String croakOfFrogs) {
+        Map<Character, Integer> levels = new HashMap<>();
+        levels.put('c', 0);
+        levels.put('r', 1);
+        levels.put('o', 2);
+        levels.put('a', 3);
+        levels.put('k', 4);
+
+        int[] count = new int[4];
+        int res = 0, sum = 0;
+        for (char c : croakOfFrogs.toCharArray()) {
+            int level = levels.get(c);
+            if (level == 0) {
+                count[0]++;
+                sum++;
+            } else if (count[level - 1] <= 0) {
+                return -1;
+            }
+            count[level - 1]--;
+            if (level == 4) {
+                sum--;
+            } else {
+                count[level]++;
+            }
+            res = Math.max(res, sum);
+        }
+
+        return sum == 0 ? res : -1;
+    }
+
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
