@@ -3,112 +3,70 @@ package other;
 import java.util.*;
 
 public class A {
-    public String reformat(String s) {
-        ArrayList<Character> s1 = new ArrayList<>();
-        ArrayList<Character> s2 = new ArrayList<>();
-        for (char c : s.toCharArray()) {
-            if (Character.isDigit(c)) {
-                s1.add(c);
-            } else {
-                s2.add(c);
+
+    public String destCity(List<List<String>> paths) {
+        Map<String, int[]> map = new HashMap<>();
+        for (List<String> path : paths) {
+            int[] fromCity = map.getOrDefault(path.get(0), new int[2]);
+            int[] toCity = map.getOrDefault(path.get(1), new int[2]);
+            fromCity[0]++;
+            toCity[1]++;
+            map.put(path.get(0), fromCity);
+            map.put(path.get(1), toCity);
+        }
+
+        for (String cityName : map.keySet()) {
+            if (map.get(cityName)[0] == 0) {
+                return cityName;
             }
         }
 
-        if (s1.size() < s2.size()) {
-            ArrayList<Character> temp = s1;
-            s1 = s2;
-            s2 = temp;
-        }
-
-        if (s1.size() - s2.size() > 1) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < s1.size(); i++) {
-            sb.append(s1.get(i));
-            if (i < s2.size()) {
-                sb.append(s2.get(i));
-            }
-        }
-
-        return sb.toString();
+        return "";
     }
 
-    public List<List<String>> displayTable(List<List<String>> orders) {
-        Set<String> foods = new HashSet<>();
-        Set<String> tables = new HashSet<>();
-        Map<String, Map<String, Integer>> map = new HashMap<>();
+    public int longestSubarray(int[] nums, int limit) {
+        PriorityQueue<Integer> minQueue = new PriorityQueue<>();
+        PriorityQueue<Integer> maxQueue = new PriorityQueue<>((a, b) -> b - a);
 
-        for (List<String> order : orders) {
-            String table = order.get(1);
-            String food = order.get(2);
-            tables.add(table);
-            foods.add(food);
-            Map<String, Integer> count = map.getOrDefault(table, new HashMap<>());
-            count.put(food, count.getOrDefault(food, 0) + 1);
-            map.put(table, count);
-        }
-
-        List<List<String>> res = new ArrayList<>();
-        List<String> firstRow = new ArrayList<>(foods);
-        Collections.sort(firstRow);
-        firstRow.add(0, "Table");
-        res.add(firstRow);
-
-        List<String> firstCol = new ArrayList<>(tables);
-        Collections.sort(firstCol, (t1, t2) -> Integer.parseInt(t1) - Integer.parseInt(t2));
-        for (String table : firstCol) {
-            List<String> row = new ArrayList<>();
-            row.add(table);
-            Map<String, Integer> count = map.getOrDefault(table, new HashMap<>());
-            for (int i = 1; i < firstRow.size(); i++) {
-                String food = firstRow.get(i);
-                row.add(String.valueOf(count.getOrDefault(food, 0)));
+        int res = 0;
+        int j = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (minQueue.size() > 0 && maxQueue.peek() - minQueue.peek() > limit) {
+                minQueue.remove(nums[i]);
+                maxQueue.remove(nums[i]);
+                continue;
             }
-            res.add(row);
+            while (j < nums.length) {
+                minQueue.add(nums[j]);
+                maxQueue.add(nums[j]);
+                if (maxQueue.peek() - minQueue.peek() > limit) {
+                    break;
+                }
+                j++;
+            }
+            res = Math.max(res, j - i);
         }
 
         return res;
     }
 
-    public int minNumberOfFrogs(String croakOfFrogs) {
-        Map<Character, Integer> levels = new HashMap<>();
-        levels.put('c', 0);
-        levels.put('r', 1);
-        levels.put('o', 2);
-        levels.put('a', 3);
-        levels.put('k', 4);
-
-        int[] count = new int[4];
-        int res = 0, sum = 0;
-        for (char c : croakOfFrogs.toCharArray()) {
-            int level = levels.get(c);
-            if (level == 0) {
-                count[0]++;
-                sum++;
-            } else if (count[level - 1] <= 0) {
-                return -1;
+    public boolean kLengthApart(int[] nums, int k) {
+        int prevIndex = -k - 1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1) {
+                if (i - prevIndex - 1 < k) {
+                    return false;
+                }
             }
-            count[level - 1]--;
-            if (level == 4) {
-                sum--;
-            } else {
-                count[level]++;
-            }
-            res = Math.max(res, sum);
         }
-
-        return sum == 0 ? res : -1;
+        return true;
     }
-
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-
     }
 
     public int fromNegativeBase(String str, int negBase) {
