@@ -4,62 +4,93 @@ import java.util.*;
 
 public class A {
 
-    public String destCity(List<List<String>> paths) {
-        Map<String, int[]> map = new HashMap<>();
-        for (List<String> path : paths) {
-            int[] fromCity = map.getOrDefault(path.get(0), new int[2]);
-            int[] toCity = map.getOrDefault(path.get(1), new int[2]);
-            fromCity[0]++;
-            toCity[1]++;
-            map.put(path.get(0), fromCity);
-            map.put(path.get(1), toCity);
-        }
+    public List<String> buildArray(int[] target, int n) {
+        List<String> res = new ArrayList<>();
 
-        for (String cityName : map.keySet()) {
-            if (map.get(cityName)[0] == 0) {
-                return cityName;
+        int idx = 0;
+        for (int i = 01; i <=n; i++) {
+            if (i == target[idx]) {
+                res.add("Push");
+                idx++;
+            } else {
+                res.add("Push");
+                res.add("Pop");
             }
-        }
-
-        return "";
-    }
-
-    public int longestSubarray(int[] nums, int limit) {
-        PriorityQueue<Integer> minQueue = new PriorityQueue<>();
-        PriorityQueue<Integer> maxQueue = new PriorityQueue<>((a, b) -> b - a);
-
-        int res = 0;
-        int j = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (minQueue.size() > 0 && maxQueue.peek() - minQueue.peek() > limit) {
-                minQueue.remove(nums[i]);
-                maxQueue.remove(nums[i]);
-                continue;
+            if (idx == target.length) {
+                break;
             }
-            while (j < nums.length) {
-                minQueue.add(nums[j]);
-                maxQueue.add(nums[j]);
-                if (maxQueue.peek() - minQueue.peek() > limit) {
-                    break;
-                }
-                j++;
-            }
-            res = Math.max(res, j - i);
         }
 
         return res;
     }
 
-    public boolean kLengthApart(int[] nums, int k) {
-        int prevIndex = -k - 1;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] == 1) {
-                if (i - prevIndex - 1 < k) {
-                    return false;
+    public int countTriplets(int[] arr) {
+        int res = 0;
+        for (int i = 0; i < arr.length - 1; i++) {
+            int xij = arr[i];
+            for (int j = i + 1; j < arr.length; j++) {
+                int xjk = arr[j];
+                for (int k = j; k < arr.length; k++) {
+                    if (j != k) {
+                        xjk ^= arr[k];
+                    }
+                    if (xij == xjk) {
+                        res++;
+                    }
                 }
+                xij ^= arr[j];
             }
         }
-        return true;
+        return res;
+    }
+
+    static class Node {
+        Set<Node> neighbors = new HashSet<>();
+        boolean hasApple = false;
+    }
+    public int minTime(int n, int[][] edges, List<Boolean> hasApple) {
+        Map<Integer, Node> graph = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            graph.put(i, new Node());
+        }
+
+        for (int[] edge : edges) {
+            Node from  = graph.get(edge[0]);
+            Node to = graph.get(edge[1]);
+            from.neighbors.add(to);
+            to.neighbors.add(from);
+            graph.put(edge[0], from);
+            graph.put(edge[1], to);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (hasApple.get(i)) {
+                Node node = graph.get(i);
+                node.hasApple = true;
+                graph.put(i, node);
+            }
+        }
+
+        return traverse(null, graph.get(0));
+    }
+    private int traverse(Node parent, Node current) {
+        if (current == null) {
+            return 0;
+        }
+
+        int res = 0;
+        for (Node next : current.neighbors) {
+            if (next == parent) {
+                continue;
+            }
+            res += traverse(current, next);
+        }
+
+        if (res == 0) {
+            return current.hasApple ? 1 : 0;
+        } else {
+            return res + 1;
+        }
     }
 
     public static void main(String[] args) {
@@ -67,6 +98,7 @@ public class A {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
+        a.buildArray(new int[] {1, 3}, 3);
     }
 
     public int fromNegativeBase(String str, int negBase) {
