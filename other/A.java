@@ -4,93 +4,105 @@ import java.util.*;
 
 public class A {
 
-    public List<String> buildArray(int[] target, int n) {
-        List<String> res = new ArrayList<>();
-
-        int idx = 0;
-        for (int i = 01; i <=n; i++) {
-            if (i == target[idx]) {
-                res.add("Push");
-                idx++;
-            } else {
-                res.add("Push");
-                res.add("Pop");
-            }
-            if (idx == target.length) {
-                break;
+    public int busyStudent(int[] startTime, int[] endTime, int queryTime) {
+        int res = 0;
+        for (int i = 0; i < startTime.length; i++) {
+            if (startTime[i] <= queryTime && endTime[i] >= queryTime) {
+                res++;
             }
         }
-
         return res;
     }
 
-    public int countTriplets(int[] arr) {
-        int res = 0;
-        for (int i = 0; i < arr.length - 1; i++) {
-            int xij = arr[i];
-            for (int j = i + 1; j < arr.length; j++) {
-                int xjk = arr[j];
-                for (int k = j; k < arr.length; k++) {
-                    if (j != k) {
-                        xjk ^= arr[k];
-                    }
-                    if (xij == xjk) {
-                        res++;
-                    }
+    static class Word {
+        String str;
+        int pos;
+        Word(String str, int pos) {
+            this.str = str;
+            this.pos = pos;
+        }
+    }
+    public String arrangeWords(String text) {
+        List<Word> words = new ArrayList<>();
+        String[] strs = text.split(" ");
+        for (int i = 0; i < strs.length; i++) {
+            words.add(new Word(strs[i].toLowerCase(), i));
+        }
+
+        Collections.sort(words, (w1, w2) -> {
+            if (w1.str.length() != w2.str.length()) {
+                return w1.str.length() - w2.str.length();
+            }
+            return w1.pos - w2.pos;
+        });
+
+        StringBuilder sb = new StringBuilder();
+        for (Word w : words) {
+            sb.append(w.str);
+            sb.append(" ");
+        }
+
+        sb.replace(0, 1, String.valueOf(sb.charAt(0)).toUpperCase());
+        sb.deleteCharAt(sb.length() - 1);
+
+        return sb.toString();
+    }
+
+    static class Person {
+        int index;
+        Set<Integer> favoriteCompanies;
+        Person(int index, Set<Integer> favoriteCompanies) {
+            this.index = index;
+            this.favoriteCompanies = favoriteCompanies;
+        }
+    }
+    public List<Integer> peopleIndexes(List<List<String>> favoriteCompanies) {
+        Map<String, Integer> companies = new HashMap<>();
+        List<Person> personList = new ArrayList<>();
+        int count = 0;
+        for (int i = 0; i < favoriteCompanies.size(); i++) {
+            Set<Integer> fc = new HashSet<>();
+            for (String c : favoriteCompanies.get(i)) {
+                if (companies.containsKey(c)) {
+                    fc.add(companies.get(c));
+                } else {
+                    fc.add(count);
+                    companies.put(c, count++);
                 }
-                xij ^= arr[j];
+            }
+            personList.add(new Person(i, fc));
+        }
+
+        for (String s : companies.keySet()) {
+            System.out.println(s + ": " + companies.get(s));
+        }
+        for (Person person : personList) {
+            System.out.print(person.index + ": ");
+            for (int i : person.favoriteCompanies) {
+                System.out.print(i +",");
+            }
+            System.out.println();
+        }
+
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < personList.size(); i++) {
+            boolean foundSuperset = false;
+            for (int j = 0; j < personList.size(); j++) {
+                if (i == j) continue;
+                if (personList.get(j).favoriteCompanies.size() < personList.get(i).favoriteCompanies.size()) continue;
+                if (personList.get(j).favoriteCompanies.containsAll(personList.get(i).favoriteCompanies)) {
+                    foundSuperset = true;
+                    break;
+                }
+            }
+            if (!foundSuperset) {
+                res.add(personList.get(i).index);
             }
         }
+
+        Collections.sort(res);
+
         return res;
-    }
-
-    static class Node {
-        Set<Node> neighbors = new HashSet<>();
-        boolean hasApple = false;
-    }
-    public int minTime(int n, int[][] edges, List<Boolean> hasApple) {
-        Map<Integer, Node> graph = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            graph.put(i, new Node());
-        }
-
-        for (int[] edge : edges) {
-            Node from  = graph.get(edge[0]);
-            Node to = graph.get(edge[1]);
-            from.neighbors.add(to);
-            to.neighbors.add(from);
-            graph.put(edge[0], from);
-            graph.put(edge[1], to);
-        }
-
-        for (int i = 0; i < n; i++) {
-            if (hasApple.get(i)) {
-                Node node = graph.get(i);
-                node.hasApple = true;
-                graph.put(i, node);
-            }
-        }
-
-        return traverse(null, graph.get(0));
-    }
-    private int traverse(Node parent, Node current) {
-        if (current == null) {
-            return 0;
-        }
-
-        int res = 0;
-        for (Node next : current.neighbors) {
-            if (next == parent) {
-                continue;
-            }
-            res += traverse(current, next);
-        }
-
-        if (res == 0) {
-            return current.hasApple ? 1 : 0;
-        } else {
-            return res + 1;
-        }
     }
 
     public static void main(String[] args) {
@@ -98,7 +110,6 @@ public class A {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        a.buildArray(new int[] {1, 3}, 3);
     }
 
     public int fromNegativeBase(String str, int negBase) {
