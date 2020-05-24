@@ -4,105 +4,69 @@ import java.util.*;
 
 public class A {
 
-    public int busyStudent(int[] startTime, int[] endTime, int queryTime) {
-        int res = 0;
-        for (int i = 0; i < startTime.length; i++) {
-            if (startTime[i] <= queryTime && endTime[i] >= queryTime) {
+    public int isPrefixOfWord(String sentence, String searchWord) {
+        String[] ss = sentence.split(" ");
+        for (int i = 0; i < ss.length; i++) {
+            if (ss[i].startsWith(searchWord)) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+
+    public int maxVowels(String s, int k) {
+        Set<Character> vowels = new HashSet<>();
+        vowels.add('a'); vowels.add('e'); vowels.add('i'); vowels.add('o'); vowels.add('u');
+
+        int count = 0;
+        for (int i = 0; i < k; i++) {
+            if (vowels.contains(s.charAt(i))) {
+                count++;
+            }
+        }
+        int res = count;
+        for (int i = k; i < s.length(); i++) {
+            if (vowels.contains(s.charAt(k))) {
+                count++;
+            }
+            if (vowels.contains(s.charAt(i - k))) {
+                count--;
+            }
+            res = Math.max(res, count);
+        }
+
+        return res;
+    }
+
+    private int res = 0;
+    public int pseudoPalindromicPaths (TreeNode root) {
+        traverse(root, new int[10]);
+        return res;
+    }
+    private void traverse(TreeNode root, int[] count) {
+        if (root == null) return;
+
+        count[root.val]++;
+
+        if (root.right == null && root.left == null) {
+            if (isPalin(count)) {
                 res++;
             }
+        } else {
+            traverse(root.left, count);
+            traverse(root.right, count);
         }
-        return res;
+
+        count[root.val]--;
     }
-
-    static class Word {
-        String str;
-        int pos;
-        Word(String str, int pos) {
-            this.str = str;
-            this.pos = pos;
-        }
-    }
-    public String arrangeWords(String text) {
-        List<Word> words = new ArrayList<>();
-        String[] strs = text.split(" ");
-        for (int i = 0; i < strs.length; i++) {
-            words.add(new Word(strs[i].toLowerCase(), i));
-        }
-
-        Collections.sort(words, (w1, w2) -> {
-            if (w1.str.length() != w2.str.length()) {
-                return w1.str.length() - w2.str.length();
-            }
-            return w1.pos - w2.pos;
-        });
-
-        StringBuilder sb = new StringBuilder();
-        for (Word w : words) {
-            sb.append(w.str);
-            sb.append(" ");
-        }
-
-        sb.replace(0, 1, String.valueOf(sb.charAt(0)).toUpperCase());
-        sb.deleteCharAt(sb.length() - 1);
-
-        return sb.toString();
-    }
-
-    static class Person {
-        int index;
-        Set<Integer> favoriteCompanies;
-        Person(int index, Set<Integer> favoriteCompanies) {
-            this.index = index;
-            this.favoriteCompanies = favoriteCompanies;
-        }
-    }
-    public List<Integer> peopleIndexes(List<List<String>> favoriteCompanies) {
-        Map<String, Integer> companies = new HashMap<>();
-        List<Person> personList = new ArrayList<>();
-        int count = 0;
-        for (int i = 0; i < favoriteCompanies.size(); i++) {
-            Set<Integer> fc = new HashSet<>();
-            for (String c : favoriteCompanies.get(i)) {
-                if (companies.containsKey(c)) {
-                    fc.add(companies.get(c));
-                } else {
-                    fc.add(count);
-                    companies.put(c, count++);
-                }
-            }
-            personList.add(new Person(i, fc));
-        }
-
-        for (String s : companies.keySet()) {
-            System.out.println(s + ": " + companies.get(s));
-        }
-        for (Person person : personList) {
-            System.out.print(person.index + ": ");
-            for (int i : person.favoriteCompanies) {
-                System.out.print(i +",");
-            }
-            System.out.println();
-        }
-
-        List<Integer> res = new ArrayList<>();
-        for (int i = 0; i < personList.size(); i++) {
-            boolean foundSuperset = false;
-            for (int j = 0; j < personList.size(); j++) {
-                if (i == j) continue;
-                if (personList.get(j).favoriteCompanies.size() < personList.get(i).favoriteCompanies.size()) continue;
-                if (personList.get(j).favoriteCompanies.containsAll(personList.get(i).favoriteCompanies)) {
-                    foundSuperset = true;
-                    break;
-                }
-            }
-            if (!foundSuperset) {
-                res.add(personList.get(i).index);
+    private boolean isPalin(int[] count) {
+        int odd = 0;
+        for (int i = 1; i < 10; i++) {
+            if (count[i] % 2 == 1) {
+                odd++;
             }
         }
-
-        Collections.sort(res);
-
-        return res;
+        return odd <= 1;
     }
 
     public static void main(String[] args) {
