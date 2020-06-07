@@ -3,70 +3,87 @@ package other;
 import java.util.*;
 
 public class A {
+    public int[] shuffle(int[] nums, int n) {
+        int[] res = new int[2*n];
 
-    public int isPrefixOfWord(String sentence, String searchWord) {
-        String[] ss = sentence.split(" ");
-        for (int i = 0; i < ss.length; i++) {
-            if (ss[i].startsWith(searchWord)) {
-                return i + 1;
-            }
+        int j = 0;
+        for (int i = 0; i < n; i++) {
+            res[j++] = nums[i];
+            res[j++] = nums[n + i];
         }
-        return -1;
+
+        return res;
     }
 
-    public int maxVowels(String s, int k) {
-        Set<Character> vowels = new HashSet<>();
-        vowels.add('a'); vowels.add('e'); vowels.add('i'); vowels.add('o'); vowels.add('u');
+    public int[] getStrongest(int[] arr, int k) {
+        if (k == arr.length) {
+            return arr;
+        }
 
-        int count = 0;
+        Arrays.sort(arr);
+        int median = arr[((arr.length - 1) / 2)];
+
+        int[] res = new int[k];
+        int left = 0, right = arr.length - 1;
         for (int i = 0; i < k; i++) {
-            if (vowels.contains(s.charAt(i))) {
-                count++;
+            int index = getStronger(arr, left, right, median);
+            if (index == left) {
+                res[i] = arr[left++];
+            } else {
+                res[i] = arr[right--];
             }
-        }
-        int res = count;
-        for (int i = k; i < s.length(); i++) {
-            if (vowels.contains(s.charAt(k))) {
-                count++;
-            }
-            if (vowels.contains(s.charAt(i - k))) {
-                count--;
-            }
-            res = Math.max(res, count);
         }
 
         return res;
     }
-
-    private int res = 0;
-    public int pseudoPalindromicPaths (TreeNode root) {
-        traverse(root, new int[10]);
-        return res;
+    private int getStronger(int[] arr, int left, int right, int median) {
+        int diff = Math.abs(arr[left] - median) - Math.abs(arr[right] - median);
+        if (diff > 0) {
+            return left;
+        }
+        return right;
     }
-    private void traverse(TreeNode root, int[] count) {
-        if (root == null) return;
 
-        count[root.val]++;
+    class BrowserHistory {
 
-        if (root.right == null && root.left == null) {
-            if (isPalin(count)) {
-                res++;
-            }
-        } else {
-            traverse(root.left, count);
-            traverse(root.right, count);
+        ArrayList<String> history;
+        int pos;
+
+        public BrowserHistory(String homepage) {
+            history = new ArrayList<>();
+            history.add(homepage);
+            pos = 0;
         }
 
-        count[root.val]--;
-    }
-    private boolean isPalin(int[] count) {
-        int odd = 0;
-        for (int i = 1; i < 10; i++) {
-            if (count[i] % 2 == 1) {
-                odd++;
-            }
+        public void visit(String url) {
+            history.subList(pos + 1, history.size()).clear();
+            history.add(url);
+            pos++;
         }
-        return odd <= 1;
+
+        public String back(int steps) {
+            while (steps > 0) {
+                if (pos > 0) {
+                    pos--;
+                    steps--;
+                } else {
+                    break;
+                }
+            }
+            return history.get(pos);
+        }
+
+        public String forward(int steps) {
+            while (steps > 0) {
+                if (pos < history.size() - 1) {
+                    pos++;
+                    steps--;
+                } else {
+                    break;
+                }
+            }
+            return history.get(pos);
+        }
     }
 
     public static void main(String[] args) {
