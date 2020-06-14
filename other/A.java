@@ -3,87 +3,92 @@ package other;
 import java.util.*;
 
 public class A {
-    public int[] shuffle(int[] nums, int n) {
-        int[] res = new int[2*n];
-
-        int j = 0;
-        for (int i = 0; i < n; i++) {
-            res[j++] = nums[i];
-            res[j++] = nums[n + i];
+    public int findLeastNumOfUniqueInts(int[] arr, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
 
-        return res;
-    }
+        List<Integer> keys = new ArrayList<>(map.keySet());
+        Collections.sort(keys, (k1, k2) -> map.get(k1) - map.get(k2));
 
-    public int[] getStrongest(int[] arr, int k) {
-        if (k == arr.length) {
-            return arr;
-        }
-
-        Arrays.sort(arr);
-        int median = arr[((arr.length - 1) / 2)];
-
-        int[] res = new int[k];
-        int left = 0, right = arr.length - 1;
-        for (int i = 0; i < k; i++) {
-            int index = getStronger(arr, left, right, median);
-            if (index == left) {
-                res[i] = arr[left++];
+        for (int i = 0; i < keys.size(); i++) {
+            int count = map.get(keys.get(i));
+            if (k >= count) {
+                k -= count;
+                map.remove(keys.get(i));
             } else {
-                res[i] = arr[right--];
+                k = 0;
+            }
+            if (k == 0) {
+                break;
             }
         }
 
-        return res;
-    }
-    private int getStronger(int[] arr, int left, int right, int median) {
-        int diff = Math.abs(arr[left] - median) - Math.abs(arr[right] - median);
-        if (diff > 0) {
-            return left;
-        }
-        return right;
+        return map.keySet().size();
     }
 
-    class BrowserHistory {
-
-        ArrayList<String> history;
-        int pos;
-
-        public BrowserHistory(String homepage) {
-            history = new ArrayList<>();
-            history.add(homepage);
-            pos = 0;
+    public int minDays(int[] bloomDay, int m, int k) {
+        if (m * k > bloomDay.length) {
+            return -1;
         }
 
-        public void visit(String url) {
-            history.subList(pos + 1, history.size()).clear();
-            history.add(url);
-            pos++;
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < bloomDay.length; i++) {
+            int day = bloomDay[i];
+            List<Integer> list = map.getOrDefault(day, new ArrayList<>());
+            list.add(i);
+            map.put(day, list);
         }
 
-        public String back(int steps) {
-            while (steps > 0) {
-                if (pos > 0) {
-                    pos--;
-                    steps--;
-                } else {
-                    break;
-                }
+        List<Integer> days = new ArrayList<>(map.keySet());
+        Collections.sort(days, (k1, k2) -> k1 - k2);
+
+        int left = 0, right = days.size() - 1;
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2;
+            if (canServe(map, days, new int[bloomDay.length], mid, m, k)) {
+                right = mid;
+            } else {
+                left = mid;
             }
-            return history.get(pos);
         }
 
-        public String forward(int steps) {
-            while (steps > 0) {
-                if (pos < history.size() - 1) {
-                    pos++;
-                    steps--;
-                } else {
-                    break;
-                }
-            }
-            return history.get(pos);
+        if (canServe(map, days, new int[bloomDay.length], left, m, k)) {
+            return days.get(left);
         }
+        return days.get(right);
+    }
+
+    private boolean canServe(Map<Integer, List<Integer>> map, List<Integer> days, int[] bloomed, int d, int m, int k) {
+        int total = 0;
+        for (int i = 0; i < d; i++) {
+            for (int flower : map.get(days.get(i))) {
+                bloomed[flower] = 1;
+                total++;
+            }
+        }
+
+        if (total < m * k) {
+            return false;
+        }
+
+        int i = 0;
+        while (i < bloomed.length && m > 0) {
+            if (bloomed[i] == 0) {
+                i++;
+                continue;
+            }
+            int j = i + 1;
+            while (j < bloomed.length && bloomed[j] == 1 && j - i < k) {
+                j++;
+            }
+            if (j - i == k) {
+                m--;
+            }
+            i = j;
+        }
+        return m <= 0;
     }
 
     public static void main(String[] args) {
@@ -91,6 +96,7 @@ public class A {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
+        a.minDays(new int[] {1,10,3,10,2}, 3, 1);
     }
 
     public int fromNegativeBase(String str, int negBase) {
