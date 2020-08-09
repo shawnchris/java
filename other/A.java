@@ -3,92 +3,91 @@ package other;
 import java.util.*;
 
 public class A {
-    public int findLeastNumOfUniqueInts(int[] arr, int k) {
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int num : arr) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
-        }
-
-        List<Integer> keys = new ArrayList<>(map.keySet());
-        Collections.sort(keys, (k1, k2) -> map.get(k1) - map.get(k2));
-
-        for (int i = 0; i < keys.size(); i++) {
-            int count = map.get(keys.get(i));
-            if (k >= count) {
-                k -= count;
-                map.remove(keys.get(i));
-            } else {
-                k = 0;
-            }
-            if (k == 0) {
-                break;
-            }
-        }
-
-        return map.keySet().size();
-    }
-
-    public int minDays(int[] bloomDay, int m, int k) {
-        if (m * k > bloomDay.length) {
-            return -1;
-        }
-
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        for (int i = 0; i < bloomDay.length; i++) {
-            int day = bloomDay[i];
-            List<Integer> list = map.getOrDefault(day, new ArrayList<>());
-            list.add(i);
-            map.put(day, list);
-        }
-
-        List<Integer> days = new ArrayList<>(map.keySet());
-        Collections.sort(days, (k1, k2) -> k1 - k2);
-
-        int left = 0, right = days.size() - 1;
-        while (left + 1 < right) {
-            int mid = left + (right - left) / 2;
-            if (canServe(map, days, new int[bloomDay.length], mid, m, k)) {
-                right = mid;
-            } else {
-                left = mid;
-            }
-        }
-
-        if (canServe(map, days, new int[bloomDay.length], left, m, k)) {
-            return days.get(left);
-        }
-        return days.get(right);
-    }
-
-    private boolean canServe(Map<Integer, List<Integer>> map, List<Integer> days, int[] bloomed, int d, int m, int k) {
-        int total = 0;
-        for (int i = 0; i < d; i++) {
-            for (int flower : map.get(days.get(i))) {
-                bloomed[flower] = 1;
-                total++;
-            }
-        }
-
-        if (total < m * k) {
-            return false;
-        }
-
-        int i = 0;
-        while (i < bloomed.length && m > 0) {
-            if (bloomed[i] == 0) {
-                i++;
+    public String makeGood(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (sb.length() == 0) {
+                sb.append(c);
                 continue;
             }
-            int j = i + 1;
-            while (j < bloomed.length && bloomed[j] == 1 && j - i < k) {
-                j++;
+            char d = sb.charAt(sb.length() - 1);
+            if (c != d && Character.toLowerCase(c) == Character.toLowerCase(d)) {
+                sb.deleteCharAt(sb.length() - 1);
+            } else {
+                sb.append(c);
             }
-            if (j - i == k) {
-                m--;
-            }
-            i = j;
         }
-        return m <= 0;
+        return sb.toString();
+    }
+
+    public char findKthBit(int n, int k) {
+        StringBuilder[] s = new StringBuilder[21];
+        s[1] = new StringBuilder("0");
+        StringBuilder prefix = new StringBuilder(s[1]);
+        for (int i = 2; i < 21; i++) {
+            StringBuilder sb = new StringBuilder(prefix);
+            for (int j = 0; j < sb.length(); j++) {
+                if (sb.charAt(j) == '0') {
+                    sb.setCharAt(j, '1');
+                } else {
+                    sb.setCharAt(j, '0');
+                }
+            }
+            sb.reverse();
+            sb.insert(0, '1');
+            s[i] = sb;
+
+            prefix.append(sb);
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if (s[i].length() >= k) {
+                System.out.println("i="+i+" k="+k+" length="+s[i].length());
+                return s[i].charAt(k - 1);
+            } else {
+                System.out.println("i="+i+" k="+k+" length="+s[i].length());
+                k -= s[i].length();
+            }
+        }
+
+        return '0';
+    }
+
+    public int maxNonOverlapping(int[] nums, int target) {
+        Map<Integer, List<Integer>> preSums = new HashMap<>();
+        List<Integer> l = new ArrayList<>();
+        l.add(-1);
+        preSums.put(0, l);
+
+        TreeMap<Integer, Interval> intervalTreeMap = new TreeMap<>();
+        int sum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            List<Integer> list = preSums.getOrDefault(sum, new ArrayList<>());
+            list.add(i);
+            preSums.put(sum, list);
+
+            List<Integer> index = preSums.get(sum - target);
+            if (index == null) continue;
+            for (int j = index.size() - 1; j >= 0; j--) {
+                if (index.get(j) == i) continue;
+                Interval interval = new Interval(index.get(j) + 1, i);
+                if (hasOverlap(intervalTreeMap, interval)) continue;
+                intervalTreeMap.put(interval.start, interval);
+            }
+        }
+
+        return intervalTreeMap.size();
+    }
+    private boolean hasOverlap(TreeMap<Integer, Interval> intervalTreeMap, Interval interval) {
+        Integer floorKey = intervalTreeMap.floorKey(interval.end);
+        if (floorKey == null) return false;
+        Interval floorInterval = intervalTreeMap.get(interval);
+        if (floorInterval.end >= interval.start || floorInterval.start <= interval.end) {
+            return true;
+        }
+        return false;
     }
 
     public static void main(String[] args) {
@@ -96,7 +95,6 @@ public class A {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        a.minDays(new int[] {1,10,3,10,2}, 3, 1);
     }
 
     public int fromNegativeBase(String str, int negBase) {
@@ -271,6 +269,11 @@ public class A {
         Interval(int s, int e) {
             start = s;
             end = e;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + start + "," + end + "]";
         }
     }
 
