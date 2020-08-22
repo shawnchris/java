@@ -3,98 +3,96 @@ package other;
 import java.util.*;
 
 public class A {
-    public String makeGood(String s) {
+
+    public String thousandSeparator(int n) {
+        if (n == 0) {
+            return "0";
+        }
         StringBuilder sb = new StringBuilder();
-        for (char c : s.toCharArray()) {
-            if (sb.length() == 0) {
-                sb.append(c);
-                continue;
-            }
-            char d = sb.charAt(sb.length() - 1);
-            if (c != d && Character.toLowerCase(c) == Character.toLowerCase(d)) {
-                sb.deleteCharAt(sb.length() - 1);
-            } else {
-                sb.append(c);
+        int c = 0;
+        while (n > 0) {
+            sb.insert(0, n % 10);
+            n /= 10;
+            c++;
+            if (c == 3 && n > 0) {
+                sb.insert(0, ".");
+                c = 0;
             }
         }
         return sb.toString();
     }
 
-    public char findKthBit(int n, int k) {
-        StringBuilder[] s = new StringBuilder[21];
-        s[1] = new StringBuilder("0");
-        StringBuilder prefix = new StringBuilder(s[1]);
-        for (int i = 2; i < 21; i++) {
-            StringBuilder sb = new StringBuilder(prefix);
-            for (int j = 0; j < sb.length(); j++) {
-                if (sb.charAt(j) == '0') {
-                    sb.setCharAt(j, '1');
-                } else {
-                    sb.setCharAt(j, '0');
+    public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
+        int[] inDegrees = new int[n];
+        for (List<Integer> edge : edges) {
+            inDegrees[edge.get(1)]++;
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (inDegrees[i] == 0) {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+
+    public int minOperations(int[] nums) {
+        int res = 0;
+        int max = 0;
+        for (int num : nums) {
+            int[] r = div(num);
+            max = Math.max(max, r[1]);
+            res += r[0];
+        }
+        return res + max;
+    }
+    private int[] div (int num) {
+        int[] res = new int[2];
+        while (num > 0) {
+            if (num % 2 == 0) {
+                num = num / 2;
+                res[1]++;
+            } else {
+                num -= 1;
+                res[0]++;
+            }
+        }
+        return res;
+    }
+
+    public boolean containsCycle(char[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        UF uf = new UF(m * n);
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i > 0 && grid[i][j] == grid[i - 1][j]) {
+                    if (uf.find(i * n + j) == uf.find((i - 1) * n + j)) {
+                        return true;
+                    } else {
+                        uf.union(i * n + j, (i - 1) * n + j);
+                    }
+                }
+                if (j > 0 && grid[i][j] == grid[i][j - 1]) {
+                    if (uf.find(i * n + j) == uf.find(i * n + j - 1)) {
+                        return true;
+                    } else {
+                        uf.union(i * n + j, i * n + j - 1);
+                    }
                 }
             }
-            sb.reverse();
-            sb.insert(0, '1');
-            s[i] = sb;
-
-            prefix.append(sb);
         }
 
-        for (int i = 1; i <= n; i++) {
-            if (s[i].length() >= k) {
-                System.out.println("i="+i+" k="+k+" length="+s[i].length());
-                return s[i].charAt(k - 1);
-            } else {
-                System.out.println("i="+i+" k="+k+" length="+s[i].length());
-                k -= s[i].length();
-            }
-        }
-
-        return '0';
-    }
-
-    public int maxNonOverlapping(int[] nums, int target) {
-        Map<Integer, List<Integer>> preSums = new HashMap<>();
-        List<Integer> l = new ArrayList<>();
-        l.add(-1);
-        preSums.put(0, l);
-
-        TreeMap<Integer, Interval> intervalTreeMap = new TreeMap<>();
-        int sum = 0;
-
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];
-            List<Integer> list = preSums.getOrDefault(sum, new ArrayList<>());
-            list.add(i);
-            preSums.put(sum, list);
-
-            List<Integer> index = preSums.get(sum - target);
-            if (index == null) continue;
-            for (int j = index.size() - 1; j >= 0; j--) {
-                if (index.get(j) == i) continue;
-                Interval interval = new Interval(index.get(j) + 1, i);
-                if (hasOverlap(intervalTreeMap, interval)) continue;
-                intervalTreeMap.put(interval.start, interval);
-            }
-        }
-
-        return intervalTreeMap.size();
-    }
-    private boolean hasOverlap(TreeMap<Integer, Interval> intervalTreeMap, Interval interval) {
-        Integer floorKey = intervalTreeMap.floorKey(interval.end);
-        if (floorKey == null) return false;
-        Interval floorInterval = intervalTreeMap.get(interval);
-        if (floorInterval.end >= interval.start || floorInterval.start <= interval.end) {
-            return true;
-        }
         return false;
     }
+
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
+        System.out.println(a);
     }
 
     public int fromNegativeBase(String str, int negBase) {
