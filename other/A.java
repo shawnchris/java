@@ -3,87 +3,74 @@ package other;
 import java.util.*;
 
 public class A {
-
-    public String thousandSeparator(int n) {
-        if (n == 0) {
-            return "0";
-        }
-        StringBuilder sb = new StringBuilder();
-        int c = 0;
-        while (n > 0) {
-            sb.insert(0, n % 10);
-            n /= 10;
-            c++;
-            if (c == 3 && n > 0) {
-                sb.insert(0, ".");
-                c = 0;
+    public List<Integer> mostVisited(int n, int[] rounds) {
+        List<Integer> res = new ArrayList<>();
+        int[] count = new int[n + 1];
+        for (int i = 0; i < rounds.length - 1; i++) {
+            int from = rounds[i];
+            int to = rounds[i + 1];
+            if (i == 0) {
+                count[from]++;
+            }
+            for (int j = from; j != to;) {
+                j++;
+                if (j > n) {
+                    j = 1;
+                }
+                count[j]++;
             }
         }
-        return sb.toString();
-    }
-
-    public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
-        int[] inDegrees = new int[n];
-        for (List<Integer> edge : edges) {
-            inDegrees[edge.get(1)]++;
+        int max = 0;
+        for (int i = 1; i <= n; i++) {
+            max = Math.max(max, count[i]);
         }
-        List<Integer> res = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            if (inDegrees[i] == 0) {
+        for (int i = 1; i <= n; i++) {
+            if (count[i] == max) {
                 res.add(i);
             }
         }
         return res;
     }
 
-    public int minOperations(int[] nums) {
+    public int maxCoins(int[] piles) {
         int res = 0;
-        int max = 0;
-        for (int num : nums) {
-            int[] r = div(num);
-            max = Math.max(max, r[1]);
-            res += r[0];
-        }
-        return res + max;
-    }
-    private int[] div (int num) {
-        int[] res = new int[2];
-        while (num > 0) {
-            if (num % 2 == 0) {
-                num = num / 2;
-                res[1]++;
-            } else {
-                num -= 1;
-                res[0]++;
-            }
+        Arrays.sort(piles);
+        int tail = piles.length - 1, head = 0;
+        for (int i = 0; i < piles.length / 3; i++) {
+            res += piles[tail - 1];
+            tail -= 2;
+            head++;
         }
         return res;
     }
 
-    public boolean containsCycle(char[][] grid) {
-        int m = grid.length, n = grid[0].length;
-        UF uf = new UF(m * n);
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i > 0 && grid[i][j] == grid[i - 1][j]) {
-                    if (uf.find(i * n + j) == uf.find((i - 1) * n + j)) {
-                        return true;
-                    } else {
-                        uf.union(i * n + j, (i - 1) * n + j);
-                    }
-                }
-                if (j > 0 && grid[i][j] == grid[i][j - 1]) {
-                    if (uf.find(i * n + j) == uf.find(i * n + j - 1)) {
-                        return true;
-                    } else {
-                        uf.union(i * n + j, i * n + j - 1);
-                    }
-                }
+    public int findLatestStep(int[] arr, int m) {
+        int res = -1;
+        Map<Integer, Integer> map = new HashMap<>();
+        TreeMap<Integer, Interval> treeMap = new TreeMap<>();
+        for (int step = 0; step < arr.length; step++) {
+            int start = arr[step];
+            int end = arr[step];
+            Interval prev = treeMap.lowerKey(arr[step]) == null ? null : treeMap.get(treeMap.lowerKey(arr[step]));
+            Interval next = treeMap.containsKey(arr[step] + 1) ? null : treeMap.get(arr[step] + 1);
+            if (prev != null && prev.end == arr[step] - 1) {
+                start = prev.start;
+                map.put(prev.end - prev.start + 1, map.get(prev.end - prev.start + 1) - 1);
+                treeMap.remove(treeMap.lowerKey(arr[step]));
+            }
+            if (next != null) {
+                end = next.end;
+                map.put(next.end - next.start + 1, map.get(next.end - next.start + 1) - 1);
+                treeMap.remove(arr[step] + 1);
+            }
+            Interval i = new Interval(start, end);
+            map.put(end - start + 1, map.getOrDefault(end - start + 1, 0) + 1);
+            treeMap.put(start, i);
+            if (map.containsKey(m) && map.get(m) > 0) {
+                res = step + 1;
             }
         }
-
-        return false;
+        return res;
     }
 
 
@@ -92,7 +79,7 @@ public class A {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        System.out.println(a);
+        System.out.println(a.findLatestStep(new int[] {3,5,1,2,4}, 1));
     }
 
     public int fromNegativeBase(String str, int negBase) {
