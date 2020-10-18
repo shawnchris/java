@@ -3,83 +3,41 @@ package other;
 import java.util.*;
 
 public class A {
-    public List<Integer> mostVisited(int n, int[] rounds) {
-        List<Integer> res = new ArrayList<>();
-        int[] count = new int[n + 1];
-        for (int i = 0; i < rounds.length - 1; i++) {
-            int from = rounds[i];
-            int to = rounds[i + 1];
-            if (i == 0) {
-                count[from]++;
-            }
-            for (int j = from; j != to;) {
-                j++;
-                if (j > n) {
-                    j = 1;
-                }
-                count[j]++;
-            }
+
+    public double trimMean(int[] arr) {
+        int len = arr.length;
+        Arrays.sort(arr);
+
+        int sum = 0;
+        for (int i = len / 20; i < len - len / 20; i++) {
+            sum += arr[i];
         }
-        int max = 0;
-        for (int i = 1; i <= n; i++) {
-            max = Math.max(max, count[i]);
-        }
-        for (int i = 1; i <= n; i++) {
-            if (count[i] == max) {
-                res.add(i);
-            }
-        }
-        return res;
+
+        return sum / 1.0 / (len - len / 10);
     }
 
-    public int maxCoins(int[] piles) {
-        int res = 0;
-        Arrays.sort(piles);
-        int tail = piles.length - 1, head = 0;
-        for (int i = 0; i < piles.length / 3; i++) {
-            res += piles[tail - 1];
-            tail -= 2;
-            head++;
-        }
-        return res;
-    }
-
-    public int findLatestStep(int[] arr, int m) {
+    public int maxLengthBetweenEqualCharacters(String s) {
         int res = -1;
-        Map<Integer, Integer> map = new HashMap<>();
-        TreeMap<Integer, Interval> treeMap = new TreeMap<>();
-        for (int step = 0; step < arr.length; step++) {
-            int start = arr[step];
-            int end = arr[step];
-            Interval prev = treeMap.lowerKey(arr[step]) == null ? null : treeMap.get(treeMap.lowerKey(arr[step]));
-            Interval next = treeMap.containsKey(arr[step] + 1) ? null : treeMap.get(arr[step] + 1);
-            if (prev != null && prev.end == arr[step] - 1) {
-                start = prev.start;
-                map.put(prev.end - prev.start + 1, map.get(prev.end - prev.start + 1) - 1);
-                treeMap.remove(treeMap.lowerKey(arr[step]));
-            }
-            if (next != null) {
-                end = next.end;
-                map.put(next.end - next.start + 1, map.get(next.end - next.start + 1) - 1);
-                treeMap.remove(arr[step] + 1);
-            }
-            Interval i = new Interval(start, end);
-            map.put(end - start + 1, map.getOrDefault(end - start + 1, 0) + 1);
-            treeMap.put(start, i);
-            if (map.containsKey(m) && map.get(m) > 0) {
-                res = step + 1;
+        Map<Character, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (map.containsKey(c)) {
+                res = Math.max(res, i - map.get(c) - 1);
+            } else {
+                map.put(c, i);
             }
         }
+
         return res;
     }
-
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        System.out.println(a.findLatestStep(new int[] {3,5,1,2,4}, 1));
+        System.out.println(a);
     }
 
     public int fromNegativeBase(String str, int negBase) {
