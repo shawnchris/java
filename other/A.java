@@ -1,31 +1,28 @@
+
 package other;
 
 import java.util.*;
 
 public class A {
+    public int[] decrypt(int[] code, int k) {
+        int n = code.length;
+        int[] res = new int[n];
 
-    public double trimMean(int[] arr) {
-        int len = arr.length;
-        Arrays.sort(arr);
-
-        int sum = 0;
-        for (int i = len / 20; i < len - len / 20; i++) {
-            sum += arr[i];
-        }
-
-        return sum / 1.0 / (len - len / 10);
-    }
-
-    public int maxLengthBetweenEqualCharacters(String s) {
-        int res = -1;
-        Map<Character, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (map.containsKey(c)) {
-                res = Math.max(res, i - map.get(c) - 1);
+        for (int i = 0; i < n; i++) {
+            if (k > 0) {
+                int sum = 0;
+                for (int j = i + 1; j <= i + k; j++) {
+                    sum += code[j >= n ? j - n : j];
+                }
+                res[i] = sum;
+            } else  if (k  < 0) {
+                int sum = 0;
+                for (int j = i - 1; j >= i - k; j--) {
+                    sum += code[j < 0 ? j + n : j];
+                }
+                res[i] = sum;
             } else {
-                map.put(c, i);
+                res[i] = 0;
             }
         }
 
