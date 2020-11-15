@@ -1,32 +1,102 @@
 
 package other;
 
+import com.sun.jdi.IntegerType;
+
 import java.util.*;
 
 public class A {
-    public int[] decrypt(int[] code, int k) {
-        int n = code.length;
-        int[] res = new int[n];
 
-        for (int i = 0; i < n; i++) {
-            if (k > 0) {
-                int sum = 0;
-                for (int j = i + 1; j <= i + k; j++) {
-                    sum += code[j >= n ? j - n : j];
+    class OrderedStream {
+
+        String[] arr;
+        int ptr;
+
+        public OrderedStream(int n) {
+            arr = new String[n + 1];
+            ptr = 1;
+        }
+
+        public List<String> insert(int id, String value) {
+            arr[id] = value;
+            List<String> res = new ArrayList<>();
+            if (id == ptr) {
+                while (!arr[ptr].equals("")) {
+                    res.add(arr[ptr]);
+                    ptr++;
                 }
-                res[i] = sum;
-            } else  if (k  < 0) {
-                int sum = 0;
-                for (int j = i - 1; j >= i - k; j--) {
-                    sum += code[j < 0 ? j + n : j];
+            }
+            return res;
+        }
+    }
+
+    public boolean closeStrings(String word1, String word2) {
+        if (word1.length() != word2.length()) return false;
+
+        List<Pair> lens1 = getLens(word1);
+        List<Pair> lens2 = getLens(word2);
+        if (lens1.size() != lens2.size()) return false;
+
+        Set<Integer> set1 = new HashSet<>();
+        Set<Integer> set2 = new HashSet<>();
+        for (Pair p : lens1) {
+            set1.add(p.a);
+        }
+        for (Pair p : lens2) {
+            set2.add(p.a);
+        }
+        set1.removeAll(set2);
+        if (!set1.isEmpty()) return false;
+
+        Collections.sort(lens1, Comparator.comparingInt(a -> a.b));
+        Collections.sort(lens2, Comparator.comparingInt(a -> a.b));
+        for (int i = 0; i < lens1.size(); i++) {
+            System.out.println(lens1.get(i) + ", " + lens2.get(i));
+            if (lens1.get(i).b != lens2.get(i).b) return false;
+        }
+        return true;
+    }
+    private List<Pair> getLens(String s) {
+        List<Pair> res = new ArrayList<>();
+        int[] count = new int[26];
+        for (int c : s.toCharArray()) {
+            count[c - 'a']++;
+        }
+        for (int i = 0; i < 26; i++) {
+            if (count[i] != 0) res.add(new Pair(i, count[i]));
+        }
+        return res;
+    }
+
+    public int minOperations(int[] nums, int x) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+        }
+        int target = sum - x;
+        System.out.println(target);
+
+        int max = -1;
+        int runningSum = 0;
+        int j = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (j < nums.length && runningSum < target) {
+                runningSum += nums[j];
+                if (runningSum == target) {
+                    max = Math.max(max, j - i + 1);
+                    // System.out.println(i+ "," + j + "," + max);
                 }
-                res[i] = sum;
-            } else {
-                res[i] = 0;
+                j++;
+            }
+
+            runningSum -= nums[i];
+            if (runningSum == target) {
+                max = Math.max(max, j - i - 1);
+                // System.out.println(i+ "," + j + "," + max);
             }
         }
 
-        return res;
+        return max == -1 ? -1 : nums.length - max;
     }
 
     public static void main(String[] args) {
@@ -35,6 +105,28 @@ public class A {
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
         System.out.println(a);
+    }
+
+    public int longestSlidingWindow(int[] nums, int target) {
+        int max = -1;
+        int runningSum = 0;
+        int j = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (j < nums.length && runningSum < target) {
+                runningSum += nums[j];
+                if (runningSum == target) {
+                    max = Math.max(max, j - i + 1);
+                }
+                j++;
+            }
+
+            runningSum -= nums[i];
+            if (runningSum == target) {
+                max = Math.max(max, j - i - 1);
+            }
+        }
+
+        return max;
     }
 
     public int fromNegativeBase(String str, int negBase) {
