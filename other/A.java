@@ -7,6 +7,47 @@ import java.util.*;
 
 public class A {
 
+    public int countConsistentStrings(String allowed, String[] words) {
+        boolean[] a = new boolean[26];
+        for (char c : allowed.toCharArray()) {
+            a[c - 'a'] = true;
+        }
+        int res = 0;
+        for (String word : words) {
+            if (isConsistent(word, a)) {
+                res++;
+            }
+        }
+        return res;
+    }
+    private boolean isConsistent(String word, boolean[] allowed) {
+        for (char c : word.toCharArray()) {
+            if (!allowed[c - 'a']) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int[] getSumAbsoluteDifferences(int[] nums) {
+        int n = nums.length;
+        int[] sumLeft = new int[n];
+        int[] sumRight = new int[n];
+
+        for (int i = 1; i < n; i++) {
+            sumLeft[i] = sumLeft[i - 1] + nums[i - 1];
+        }
+        for (int i = n - 2; i >= 0; i--) {
+            sumRight[i] = sumRight[i + 1] + nums[i + 1];
+        }
+
+        int[] res = new int[n];
+        for (int i = 0; i < n; i++) {
+            res[i] = i * nums[i] - sumLeft[i] + sumRight[i] - (n - i - 1) * nums[i];
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
