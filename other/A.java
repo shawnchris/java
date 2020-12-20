@@ -7,6 +7,48 @@ import java.util.*;
 
 public class A {
 
+    public String reformatNumber(String number) {
+        number = number.replaceAll(" ", "");
+        number = number.replaceAll("-", "");
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (i < number.length()) {
+            if (i + 4 >= number.length()) {
+                if (i + 4 == number.length()) {
+                    sb.append("-").append(number, i, i + 2).append("-")
+                        .append(number.substring(i + 2));
+                } else {
+                    sb.append("-").append(number.substring(i));
+                }
+                break;
+            } else {
+                sb.append("-").append(number, i, i + 3);
+                i += 3;
+            }
+        }
+        return sb.substring(1);
+    }
+
+    public int maximumUniqueSubarray(int[] nums) {
+        int max = -1;
+        int runningSum = 0;
+        int j = 0;
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            while (j < nums.length && !set.contains(nums[j])) {
+                runningSum += nums[j];
+                set.add(nums[j]);
+                max = Math.max(max, runningSum);
+                j++;
+            }
+
+            runningSum -= nums[i];
+            set.remove(nums[i]);
+        }
+
+        return max;
+    }
+
     public int countConsistentStrings(String allowed, String[] words) {
         boolean[] a = new boolean[26];
         for (char c : allowed.toCharArray()) {
