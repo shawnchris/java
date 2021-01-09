@@ -7,86 +7,49 @@ import java.util.*;
 
 public class A {
 
-    public String reformatNumber(String number) {
-        number = number.replaceAll(" ", "");
-        number = number.replaceAll("-", "");
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        while (i < number.length()) {
-            if (i + 4 >= number.length()) {
-                if (i + 4 == number.length()) {
-                    sb.append("-").append(number, i, i + 2).append("-")
-                        .append(number.substring(i + 2));
-                } else {
-                    sb.append("-").append(number.substring(i));
-                }
-                break;
-            } else {
-                sb.append("-").append(number, i, i + 3);
-                i += 3;
-            }
-        }
-        return sb.substring(1);
-    }
-
-    public int maximumUniqueSubarray(int[] nums) {
-        int max = -1;
-        int runningSum = 0;
-        int j = 0;
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < nums.length; i++) {
-            while (j < nums.length && !set.contains(nums[j])) {
-                runningSum += nums[j];
-                set.add(nums[j]);
-                max = Math.max(max, runningSum);
-                j++;
-            }
-
-            runningSum -= nums[i];
-            set.remove(nums[i]);
-        }
-
-        return max;
-    }
-
-    public int countConsistentStrings(String allowed, String[] words) {
-        boolean[] a = new boolean[26];
-        for (char c : allowed.toCharArray()) {
-            a[c - 'a'] = true;
-        }
+    public int totalMoney(int n) {
         int res = 0;
-        for (String word : words) {
-            if (isConsistent(word, a)) {
-                res++;
-            }
+        for (int i = 0; i <= n; i++) {
+            res += (i - 1) / 7 + (i - 1) % 7 + 1;
         }
         return res;
     }
-    private boolean isConsistent(String word, boolean[] allowed) {
-        for (char c : word.toCharArray()) {
-            if (!allowed[c - 'a']) {
-                return false;
+
+    String S;
+    public int maximumGain(String s, int x, int y) {
+        String a = "ab";
+        String b = "ba";
+        if (x < y) {
+            int temp = x;
+            x = y;
+            y = temp;
+            String tempS = a;
+            a = b;
+            b = tempS;
+        }
+
+        int res = 0;
+        S = s;
+        res += remove(a, x);
+        res += remove(b, y);
+
+        return res;
+    }
+    private int remove(String t, int v) {
+        int res = 0;
+        StringBuilder sb = new StringBuilder();
+        char first = t.charAt(0), second = t.charAt(1);
+
+        for (char c : S.toCharArray()) {
+            if (c == second && sb.length() != 0 && sb.charAt(sb.length() - 1) == first) {
+                sb.delete(sb.length() - 1, sb.length());
+                res += v;
+            } else {
+                sb.append(c);
             }
         }
-        return true;
-    }
 
-    public int[] getSumAbsoluteDifferences(int[] nums) {
-        int n = nums.length;
-        int[] sumLeft = new int[n];
-        int[] sumRight = new int[n];
-
-        for (int i = 1; i < n; i++) {
-            sumLeft[i] = sumLeft[i - 1] + nums[i - 1];
-        }
-        for (int i = n - 2; i >= 0; i--) {
-            sumRight[i] = sumRight[i + 1] + nums[i + 1];
-        }
-
-        int[] res = new int[n];
-        for (int i = 0; i < n; i++) {
-            res[i] = i * nums[i] - sumLeft[i] + sumRight[i] - (n - i - 1) * nums[i];
-        }
+        S = sb.toString();
         return res;
     }
 
