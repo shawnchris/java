@@ -1,56 +1,74 @@
 
 package other;
 
-import com.sun.jdi.IntegerType;
-
 import java.util.*;
 
 public class A {
 
-    public int totalMoney(int n) {
-        int res = 0;
-        for (int i = 0; i <= n; i++) {
-            res += (i - 1) / 7 + (i - 1) % 7 + 1;
+    public int sumOfUnique(int[] nums) {
+        int[] count = new int[200];
+        for (int num : nums) {
+            count[num]++;
         }
-        return res;
-    }
-
-    String S;
-    public int maximumGain(String s, int x, int y) {
-        String a = "ab";
-        String b = "ba";
-        if (x < y) {
-            int temp = x;
-            x = y;
-            y = temp;
-            String tempS = a;
-            a = b;
-            b = tempS;
-        }
-
         int res = 0;
-        S = s;
-        res += remove(a, x);
-        res += remove(b, y);
-
-        return res;
-    }
-    private int remove(String t, int v) {
-        int res = 0;
-        StringBuilder sb = new StringBuilder();
-        char first = t.charAt(0), second = t.charAt(1);
-
-        for (char c : S.toCharArray()) {
-            if (c == second && sb.length() != 0 && sb.charAt(sb.length() - 1) == first) {
-                sb.delete(sb.length() - 1, sb.length());
-                res += v;
-            } else {
-                sb.append(c);
+        for (int i = 0; i < 200; i++) {
+            if (count[i] == 1) {
+                res += i;
             }
         }
-
-        S = sb.toString();
         return res;
+    }
+
+    public int maxAbsoluteSum(int[] nums) {
+        int n = nums.length;
+        int[] min = new int[n];
+        int[] max = new int[n];
+        int[] sum = new int[n];
+        sum[0] = nums[0];
+        min[0] = nums[0];
+        max[0] = nums[0];
+
+        int res = 0;
+        for (int i = 1; i < n; i++) {
+            sum[i] = sum[i - 1] + nums[i];
+            min[i] = Math.min(sum[i], min[i - 1]);
+            max[i] = Math.max(sum[i], max[i - 1]);
+            res = Math.max(max[i] - min[i], res);
+        }
+
+        return res;
+    }
+
+    public int minimumLength(String s) {
+        int head = 0;
+        int tail = s.length() - 1;
+
+        while (head < tail) {
+            if (s.charAt(head) != s.charAt(tail)) {
+                break;
+            }
+
+            int head1 = head;
+            int head2 = head;
+            int tail1 = tail;
+            int tail2 = tail;
+            while (true) {
+                head2 =
+                    (head1 + 1 < tail2 && s.charAt(head1 + 1) == s.charAt(head1)) ? head1 + 1 : head1;
+                tail2 =
+                    (tail1 - 1 > head2 && s.charAt(tail1 - 1) == s.charAt(tail1)) ? tail1 - 1 : tail1;
+                if (head1 == head2 && tail1 == tail2) {
+                    break;
+                }
+                head1 = head2;
+                tail1 = tail2;
+            }
+
+            head = head2 + 1;
+            tail = tail2 - 1;
+        }
+
+        return tail - head + 1;
     }
 
     public static void main(String[] args) {
@@ -58,7 +76,7 @@ public class A {
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        System.out.println(a);
+        System.out.println(a.minimumLength("aabccabba"));
     }
 
     public int longestSlidingWindow(int[] nums, int target) {
