@@ -5,78 +5,67 @@ import java.util.*;
 
 public class A {
 
-    public int sumOfUnique(int[] nums) {
-        int[] count = new int[200];
-        for (int num : nums) {
-            count[num]++;
-        }
+    public int maxIceCream(int[] costs, int coins) {
+        Arrays.sort(costs);
         int res = 0;
-        for (int i = 0; i < 200; i++) {
-            if (count[i] == 1) {
-                res += i;
-            }
+        for (int cost: costs) {
+            if (coins < cost) break;
+            coins -= cost;
+            res++;
         }
         return res;
     }
 
-    public int maxAbsoluteSum(int[] nums) {
-        int n = nums.length;
-        int[] min = new int[n];
-        int[] max = new int[n];
-        int[] sum = new int[n];
-        sum[0] = nums[0];
-        min[0] = nums[0];
-        max[0] = nums[0];
+    static class Task {
+        int index;
+        int enqueueTime;
+        int processingTime;
+        public Task(int index,
+            int enqueueTime,
+            int processingTime) {
+            this.index = index;
+            this.enqueueTime = enqueueTime;
+            this.processingTime = processingTime;
+        }
+    }
+    public int[] getOrder(int[][] tasks) {
+        List<Task> list = new ArrayList<>();
+        for (int i = 0; i < tasks.length; i++) {
+            list.add(new Task(i, tasks[i][0], tasks[i][1]));
+        }
+        list.sort(Comparator.comparingInt(a -> a.processingTime));
 
-        int res = 0;
-        for (int i = 1; i < n; i++) {
-            sum[i] = sum[i - 1] + nums[i];
-            min[i] = Math.min(sum[i], min[i - 1]);
-            max[i] = Math.max(sum[i], max[i - 1]);
-            res = Math.max(max[i] - min[i], res);
+        int[] res = new int[tasks.length];
+        PriorityQueue<Task> pq = new PriorityQueue<>((a, b) -> {
+            if (a.processingTime == b.processingTime) {
+                return a.index - b.index;
+            }
+            return a.processingTime - b.processingTime;
+        });
+
+        int time = list.get(0).enqueueTime;
+        pq.add(list.get(0));
+        int index = 1;
+        int resIndex = 0;
+
+        while (!pq.isEmpty()) {
+            while (index < list.size() && list.get(index).enqueueTime <= time) {
+                pq.add(list.get(index++));
+            }
+            res[resIndex++] = pq.poll().index;
         }
 
         return res;
     }
 
-    public int minimumLength(String s) {
-        int head = 0;
-        int tail = s.length() - 1;
-
-        while (head < tail) {
-            if (s.charAt(head) != s.charAt(tail)) {
-                break;
-            }
-
-            int head1 = head;
-            int head2 = head;
-            int tail1 = tail;
-            int tail2 = tail;
-            while (true) {
-                head2 =
-                    (head1 + 1 < tail2 && s.charAt(head1 + 1) == s.charAt(head1)) ? head1 + 1 : head1;
-                tail2 =
-                    (tail1 - 1 > head2 && s.charAt(tail1 - 1) == s.charAt(tail1)) ? tail1 - 1 : tail1;
-                if (head1 == head2 && tail1 == tail2) {
-                    break;
-                }
-                head1 = head2;
-                tail1 = tail2;
-            }
-
-            head = head2 + 1;
-            tail = tail2 - 1;
-        }
-
-        return tail - head + 1;
-    }
+    private static int MOD = 1000000007;
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
         System.out.println(Integer.MAX_VALUE);
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
-        System.out.println(a.minimumLength("aabccabba"));
+        System.out.println(a);
     }
 
     public int longestSlidingWindow(int[] nums, int target) {
