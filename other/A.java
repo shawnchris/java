@@ -5,6 +5,8 @@ import java.util.*;
 
 public class A {
     public int countGoodSubstrings(String s) {
+        if (s.length() < 3) return 0;
+
         int[] count = new int[26];
         for (int i = 0; i < 3; i++) {
             count[s.charAt(i) - 'a']++;
