@@ -4,18 +4,26 @@ package other;
 import java.util.*;
 
 public class A {
-    public int getMinDistance(int[] nums, int target, int start) {
-        int res = 0;
-        while (start - res >= 0 || start + res < nums.length) {
-            if (start - res >= 0 && nums[start - res] == target) {
-                return res;
-            }
-            if (start + res < nums.length && nums[start + res] == target) {
-                return res;
-            }
-            res++;
+    public int countGoodSubstrings(String s) {
+        int[] count = new int[26];
+        for (int i = 0; i < 3; i++) {
+            count[s.charAt(i) - 'a']++;
         }
-        return -1;
+        int res = isGood(count) ? 1 : 0;
+
+        for (int i = 3; i < s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
+            count[s.charAt(i - 3) - 'a']--;
+            res += isGood(count) ? 1 : 0;
+        }
+        return res;
+    }
+    private boolean isGood(int[] count) {
+        int c = 0;
+        for (int i = 0; i < 26; i++) {
+            if (count[i] > 0) c++;
+        }
+        return c == 3;
     }
 
     private static int MOD = 1000000007;
