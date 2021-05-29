@@ -4,58 +4,18 @@ package other;
 import java.util.*;
 
 public class A {
-
-    public int maxIceCream(int[] costs, int coins) {
-        Arrays.sort(costs);
+    public int getMinDistance(int[] nums, int target, int start) {
         int res = 0;
-        for (int cost: costs) {
-            if (coins < cost) break;
-            coins -= cost;
+        while (start - res >= 0 || start + res < nums.length) {
+            if (start - res >= 0 && nums[start - res] == target) {
+                return res;
+            }
+            if (start + res < nums.length && nums[start + res] == target) {
+                return res;
+            }
             res++;
         }
-        return res;
-    }
-
-    static class Task {
-        int index;
-        int enqueueTime;
-        int processingTime;
-        public Task(int index,
-            int enqueueTime,
-            int processingTime) {
-            this.index = index;
-            this.enqueueTime = enqueueTime;
-            this.processingTime = processingTime;
-        }
-    }
-    public int[] getOrder(int[][] tasks) {
-        List<Task> list = new ArrayList<>();
-        for (int i = 0; i < tasks.length; i++) {
-            list.add(new Task(i, tasks[i][0], tasks[i][1]));
-        }
-        list.sort(Comparator.comparingInt(a -> a.processingTime));
-
-        int[] res = new int[tasks.length];
-        PriorityQueue<Task> pq = new PriorityQueue<>((a, b) -> {
-            if (a.processingTime == b.processingTime) {
-                return a.index - b.index;
-            }
-            return a.processingTime - b.processingTime;
-        });
-
-        int time = list.get(0).enqueueTime;
-        pq.add(list.get(0));
-        int index = 1;
-        int resIndex = 0;
-
-        while (!pq.isEmpty()) {
-            while (index < list.size() && list.get(index).enqueueTime <= time) {
-                pq.add(list.get(index++));
-            }
-            res[resIndex++] = pq.poll().index;
-        }
-
-        return res;
+        return -1;
     }
 
     private static int MOD = 1000000007;
