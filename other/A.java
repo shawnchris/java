@@ -4,28 +4,81 @@ package other;
 import java.util.*;
 
 public class A {
-    public int countGoodSubstrings(String s) {
-        if (s.length() < 3) return 0;
-
-        int[] count = new int[26];
-        for (int i = 0; i < 3; i++) {
-            count[s.charAt(i) - 'a']++;
+    public boolean findRotation(int[][] mat, int[][] target) {
+        int n = mat.length;
+        boolean equal = true;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int a = mat[i][j];
+                if (a != target[i][j]) {
+                    equal = false;
+                    break;
+                }
+            }
+            if (!equal) break;
         }
-        int res = isGood(count) ? 1 : 0;
+        if (equal) return true;
 
-        for (int i = 3; i < s.length(); i++) {
-            count[s.charAt(i) - 'a']++;
-            count[s.charAt(i - 3) - 'a']--;
-            res += isGood(count) ? 1 : 0;
+        equal = true;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int a = mat[j][n - i - 1];
+                if (a != target[i][j]) {
+                    equal = false;
+                    break;
+                }
+            }
+            if (!equal) break;
         }
-        return res;
+        if (equal) return true;
+
+        equal = true;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int a = mat[n - i - 1][n - j - 1];
+                if (a != target[i][j]) {
+                    equal = false;
+                    break;
+                }
+            }
+            if (!equal) break;
+        }
+        if (equal) return true;
+
+        equal = true;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int a = mat[n - j - 1][n - i - 1];
+                if (a != target[i][j]) {
+                    equal = false;
+                    break;
+                }
+            }
+            if (!equal) break;
+        }
+        return equal;
     }
-    private boolean isGood(int[] count) {
-        int c = 0;
-        for (int i = 0; i < 26; i++) {
-            if (count[i] > 0) c++;
+
+    public int reductionOperations(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num: nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        return c == 3;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+        for (int key : map.keySet()) {
+            pq.add(new int[] {key, map.get(key)});
+        }
+
+        int res = 0;
+        while (pq.size() > 1) {
+            int[] largest = pq.poll();
+            int[] nextLargest = pq.poll();
+            res += largest[1];
+            nextLargest[1] += largest[1];
+            pq.add(nextLargest);
+        }
+
+        return res;
     }
 
     private static int MOD = 1000000007;
