@@ -4,81 +4,33 @@ package other;
 import java.util.*;
 
 public class A {
-    public boolean findRotation(int[][] mat, int[][] target) {
-        int n = mat.length;
-        boolean equal = true;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int a = mat[i][j];
-                if (a != target[i][j]) {
-                    equal = false;
-                    break;
-                }
-            }
-            if (!equal) break;
-        }
-        if (equal) return true;
 
-        equal = true;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int a = mat[j][n - i - 1];
-                if (a != target[i][j]) {
-                    equal = false;
-                    break;
-                }
+    public boolean isCovered(int[][] ranges, int left, int right) {
+        int[] c = new int[51];
+        for (int[] range : ranges) {
+            for (int i = range[0]; i <= range[1]; i++) {
+                c[i] = 1;
             }
-            if (!equal) break;
         }
-        if (equal) return true;
 
-        equal = true;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int a = mat[n - i - 1][n - j - 1];
-                if (a != target[i][j]) {
-                    equal = false;
-                    break;
-                }
-            }
-            if (!equal) break;
+        for (int i = left; i <= right; i++) {
+            if (c[i] <= 0) return false;
         }
-        if (equal) return true;
-
-        equal = true;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                int a = mat[n - j - 1][n - i - 1];
-                if (a != target[i][j]) {
-                    equal = false;
-                    break;
-                }
-            }
-            if (!equal) break;
-        }
-        return equal;
+        return true;
     }
 
-    public int reductionOperations(int[] nums) {
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int num: nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
-        }
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
-        for (int key : map.keySet()) {
-            pq.add(new int[] {key, map.get(key)});
+    public int chalkReplacer(int[] chalk, int k) {
+        int sum = 0;
+        for (int c : chalk) {
+            sum += c;
         }
 
-        int res = 0;
-        while (pq.size() > 1) {
-            int[] largest = pq.poll();
-            int[] nextLargest = pq.poll();
-            res += largest[1];
-            nextLargest[1] += largest[1];
-            pq.add(nextLargest);
+        k = k % sum;
+        for (int i = 0; i < chalk.length; i++) {
+            if (k < chalk[i]) return i;
+            k -= chalk[i];
         }
-
-        return res;
+        return -1;
     }
 
     private static int MOD = 1000000007;
