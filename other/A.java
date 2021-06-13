@@ -4,33 +4,18 @@ package other;
 import java.util.*;
 
 public class A {
-
-    public boolean isCovered(int[][] ranges, int left, int right) {
-        int[] c = new int[51];
-        for (int[] range : ranges) {
-            for (int i = range[0]; i <= range[1]; i++) {
-                c[i] = 1;
+    public boolean makeEqual(String[] words) {
+        int[] count = new int[26];
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                count['c' - 'a']++;
             }
         }
 
-        for (int i = left; i <= right; i++) {
-            if (c[i] <= 0) return false;
+        for (int i : count) {
+            if (count[i] % words.length != 0) return false;
         }
         return true;
-    }
-
-    public int chalkReplacer(int[] chalk, int k) {
-        int sum = 0;
-        for (int c : chalk) {
-            sum += c;
-        }
-
-        k = k % sum;
-        for (int i = 0; i < chalk.length; i++) {
-            if (k < chalk[i]) return i;
-            k -= chalk[i];
-        }
-        return -1;
     }
 
     private static int MOD = 1000000007;
