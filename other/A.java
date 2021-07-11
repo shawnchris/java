@@ -4,18 +4,56 @@ package other;
 import java.util.*;
 
 public class A {
-    public boolean makeEqual(String[] words) {
-        int[] count = new int[26];
-        for (String word : words) {
-            for (char c : word.toCharArray()) {
-                count['c' - 'a']++;
+    public int countTriples(int n) {
+        int res = 0;
+        for (int a = 1; a <= n; a++) {
+            for (int b = 1; b <= n; b++) {
+                int cc = a * a + b * b;
+                if (cc > n * n) {
+                    break;
+                }
+                if (Math.sqrt(cc) == (int)Math.sqrt(cc)) {
+                    System.out.println(a + ", " + b);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    public int nearestExit(char[][] A, int[] e) {
+        int m = A.length, n = A[0].length;
+        Queue<Integer> queue = new ArrayDeque<>();
+        Set<Integer> visited = new HashSet<>();
+        queue.add(e[0] * n + e[1]);
+        visited.add(e[0] * n + e[1]);
+
+        int step = 0;
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        while (!queue.isEmpty()) {
+            step++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int p = queue.poll();
+                int r = p / n;
+                int c = p % n;
+
+                for (int[] d : dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
+                    if (nr >= m || nr < 0 || nc >= n || nc < 0 || visited.contains(nr * n + nc)) continue;
+                    if (A[nr][nc] == '+') continue;
+                    if (nr == 0 || nr == m - 1 || nc == 0 || nc == n - 1) {
+                        return step;
+                    }
+                    queue.add(nr * n + nc);
+                    visited.add(nr * n + nc);
+                    // System.out.println("Add [" + nr + "," + nc + "]" );
+                }
             }
         }
 
-        for (int i : count) {
-            if (count[i] % words.length != 0) return false;
-        }
-        return true;
+        return -1;
     }
 
     private static int MOD = 1000000007;
@@ -131,12 +169,12 @@ public class A {
         return fresh == 0 ? step - 1 : -1;
     }
 
-    private int bfs(int[][] A) {
+    private int bfs(int[][] A, int[] e) {
         int m = A.length, n = A[0].length;
         Queue<Integer> queue = new ArrayDeque<>();
         Set<Integer> visited = new HashSet<>();
-        queue.add(0);
-        visited.add(0);
+        queue.add(e[0] * n + e[1]);
+        visited.add(e[0] * n + e[1]);
 
         int step = 0;
         int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -147,20 +185,104 @@ public class A {
                 int p = queue.poll();
                 int r = p / n;
                 int c = p % n;
+
                 for (int[] d : dirs) {
                     int nr = r + d[0];
                     int nc = c + d[1];
                     if (nr >= m || nr < 0 || nc >= n || nc < 0 || visited.contains(nr * n + nc)) continue;
-                    if (A[nr][nc] == 1) {
-                        if (false) return step;
-                        continue;
+                    if (A[nr][nc] == '+') continue;
+                    if (nr == 0 || nr == m - 1 || nc == 0 || nc == n - 1) {
+                        return step;
                     }
                     queue.add(nr * n + nc);
+                    visited.add(nr * n + nc);
+                    // System.out.println("Add [" + nr + "," + nc + "]" );
                 }
             }
         }
 
         return -1;
+    }
+
+    public boolean sumGame(String num) {
+        int leftSum = 0;
+        int rightSum = 0;
+        int leftQm = 0;
+        int rightQm = 0;
+        for (int i = 0; i < num.length(); i++) {
+            if (i < num.length() / 2) {
+                if (num.charAt(i) == '?') {
+                    leftQm++;
+                } else {
+                    leftSum += Integer.parseInt(num.charAt(i) + "");
+                }
+            } else {
+                if (num.charAt(i) == '?') {
+                    rightQm++;
+                } else {
+                    rightSum += Integer.parseInt(num.charAt(i) + "");
+                }
+            }
+        }
+        return alice(leftSum, leftQm, rightSum, rightQm, new HashMap<>());
+    }
+    private boolean alice(int leftSum, int leftQm, int rightSum, int rightQm, Map<String, Boolean> cache) {
+        if (leftQm == 0 && rightQm == 0 && leftSum != rightSum) {
+            return true;
+        }
+
+        String signature = leftSum + "," + leftQm + "," + rightSum + "," + rightQm;
+        if (cache.containsKey(signature)) {
+            return cache.get(signature);
+        }
+
+        if (leftQm > 0) {
+            for (int i = 0; i < 10; i++) {
+                if (!bob(leftSum + i, leftQm - 1, rightSum, rightQm, cache)) {
+                    cache.put(signature, true);
+                    return true;
+                }
+            }
+        }
+        if (rightQm > 0) {
+            for (int i = 0; i < 10; i++) {
+                if (!bob(leftSum, leftQm, rightSum + i, rightQm - 1, cache)) {
+                    cache.put(signature, true);
+                    return true;
+                }
+            }
+        }
+        cache.put(signature, false);
+        return false;
+    }
+    private boolean bob(int leftSum, int leftQm, int rightSum, int rightQm, Map<String, Boolean> cache) {
+        if (leftQm == 0 && rightQm == 0 && leftSum == rightSum) {
+            return true;
+        }
+
+        String signature = leftSum + "," + leftQm + "," + rightSum + "," + rightQm;
+        if (cache.containsKey(signature)) {
+            return cache.get(signature);
+        }
+
+        if (leftQm > 0) {
+            for (int i = 0; i < 10; i++) {
+                if (!alice(leftSum + i, leftQm - 1, rightSum, rightQm, cache)) {
+                    cache.put(signature, true);
+                    return true;
+                }
+            }
+        }
+        if (rightQm > 0) {
+            for (int i = 0; i < 10; i++) {
+                if (!alice(leftSum, leftQm, rightSum + i, rightQm - 1, cache)) {
+                    cache.put(signature, true);
+                    return true;
+                }
+            }
+        }
+        cache.put(signature, false);
+        return false;
     }
 
     private Map<Integer, int[]> getMap() {
