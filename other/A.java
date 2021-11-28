@@ -4,59 +4,84 @@ package other;
 import java.util.*;
 
 public class A {
-    public int countTriples(int n) {
+    static class Ch {
+        int attack;
+        int defense;
+        Ch (int attack, int defense) {
+            this.attack = attack;
+            this.defense = defense;
+        }
+    }
+    public int numberOfWeakCharacters(int[][] properties) {
+        List<Ch> list = new ArrayList<>();
+        for (int[] p : properties) {
+            list.add(new Ch(p[0], p[1]));
+        }
+        list.sort(Comparator.comparing(c -> c.attack));
+
+        int maxDefense = Integer.MIN_VALUE;
+        int maxAttack = Integer.MAX_VALUE;
         int res = 0;
-        for (int a = 1; a <= n; a++) {
-            for (int b = 1; b <= n; b++) {
-                int cc = a * a + b * b;
-                if (cc > n * n) {
-                    break;
-                }
-                if (Math.sqrt(cc) == (int)Math.sqrt(cc)) {
-                    System.out.println(a + ", " + b);
-                    res++;
-                }
+        for (int i = list.size() - 1; i >= 0; i--) {
+            Ch c = list.get(i);
+            System.out.println(c.attack + "," + c.defense + ":" + maxAttack + "," + maxDefense);
+            if (maxAttack > c.attack && maxDefense > c.defense) {
+                res++;
+            } else {
+                maxAttack = Math.max(maxAttack, c.attack);
+                maxDefense = Math.max(maxDefense, c.defense);
             }
         }
+
         return res;
     }
 
-    public int nearestExit(char[][] A, int[] e) {
-        int m = A.length, n = A[0].length;
-        Queue<Integer> queue = new ArrayDeque<>();
-        Set<Integer> visited = new HashSet<>();
-        queue.add(e[0] * n + e[1]);
-        visited.add(e[0] * n + e[1]);
+    private static int MOD = 1000000007;
 
-        int step = 0;
-        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        while (!queue.isEmpty()) {
-            step++;
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                int p = queue.poll();
-                int r = p / n;
-                int c = p % n;
+    public int countWords(String[] words1, String[] words2) {
+        Map<String, Integer> map1 = new HashMap<>();
+        Map<String, Integer> map2 = new HashMap<>();
+        for (String word: words1) {
+            map1.put(word, map1.getOrDefault(word, 0) + 1);
+        }
+        for (String word: words2) {
+            map2.put(word, map2.getOrDefault(word, 0) + 1);
+        }
 
-                for (int[] d : dirs) {
-                    int nr = r + d[0];
-                    int nc = c + d[1];
-                    if (nr >= m || nr < 0 || nc >= n || nc < 0 || visited.contains(nr * n + nc)) continue;
-                    if (A[nr][nc] == '+') continue;
-                    if (nr == 0 || nr == m - 1 || nc == 0 || nc == n - 1) {
-                        return step;
-                    }
-                    queue.add(nr * n + nc);
-                    visited.add(nr * n + nc);
-                    // System.out.println("Add [" + nr + "," + nc + "]" );
-                }
+        int count = 0;
+        for (String key: map1.keySet()) {
+            if (map1.get(key) == 1 && map2.containsKey(key) && map2.get(key) == 1) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int minimumBuckets(String street) {
+        int bCount = 0;
+        int i = 0;
+        while (i < street.length()) {
+            int j = street.indexOf('H', i);
+            if (noSpace(street, j)) return -1;
+            if (canSave(street, j)) {
+                bCount++;
+                i = j + 3;
+            } else {
+                bCount++;
+                i = j + 1;
             }
         }
 
-        return -1;
+        return bCount;
     }
-
-    private static int MOD = 1000000007;
+    private boolean noSpace(String street, int index) {
+        boolean noLeftSpace = index == 0 || street.charAt(index - 1) != '.';
+        boolean noRightSpace = index == street.length() - 1 || street.charAt(index + 1) != '.';
+        return noLeftSpace && noRightSpace;
+    }
+    private boolean canSave(String street, int index) {
+        return index + 2 < street.length() && street.charAt(index + 2) == 'H';
+    }
 
     public static void main(String[] args) {
         System.out.println(-1 % 4);
@@ -64,6 +89,7 @@ public class A {
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
         System.out.println(a);
+
     }
 
     public int longestSlidingWindow(int[] nums, int target) {
