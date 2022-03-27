@@ -89,7 +89,21 @@ public class A {
         System.out.println(Integer.MIN_VALUE);
         A a = new A();
         System.out.println(a);
-
+        List<String> cars = new ArrayList<>();
+        cars.add("Volvo");
+        cars.add("Ford");
+        cars.add("BMW");
+        cars.add("Volvo");
+        cars.add("Ford");
+        cars.add("Volvo");
+        Map<String, Integer> counts = new HashMap<>();
+        // Your code starts from here.
+        // Should print 3.
+        System.out.println(counts.get("Volvo"));
+        // Should print 2.
+        System.out.println(counts.get("Ford"));
+        // Should print 1.
+        System.out.println(counts.get("BMW"));
     }
 
     public int longestSlidingWindow(int[] nums, int target) {
