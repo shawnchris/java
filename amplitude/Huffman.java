@@ -46,8 +46,8 @@ public class Huffman {
   public static void main(String[] args) {
     // number of characters.
     int n = 6;
-    char[] charArray = {'a', 'b', 'c', 'd', 'e', 'f'};
-    int[] charfreq = {5, 9, 12, 13, 16, 45};
+    char[] charArray = {'A', 'B', 'C', 'D', 'E', 'F'};
+    int[] charfreq = {9, 2, 4, 5, 8, 1};
 
     // creating a priority queue q. makes a min-priority queue(min-heap).
     PriorityQueue<HuffmanNode> q
