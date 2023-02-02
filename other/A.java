@@ -4,6 +4,22 @@ package other;
 import java.util.*;
 
 public class A {
+    public int longestSubarray(int[] nums, int limit) {
+        int left = 0, right, max = 0;
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for (right = 0; right < nums.length; right++) {
+            map.put(nums[right], 1 + map.getOrDefault(nums[right], 0));
+            while (map.lastEntry().getKey() - map.firstEntry().getKey() > limit) {
+                map.put(nums[left], map.get(nums[left] - 1));
+                if (map.get(nums[left]) == 0) {
+                    map.remove(nums[left]);
+                }
+                left++;
+            }
+            max = Math.max(max, right - left + 1);
+        }
+        return max;
+    }
     static class Ch {
         int attack;
         int defense;
