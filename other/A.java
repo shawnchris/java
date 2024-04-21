@@ -4,6 +4,39 @@ package other;
 import java.util.*;
 
 public class A {
+
+    public static int lcm(int number1, int number2) {
+        if (number1 == 0 || number2 == 0)
+            return 0;
+        else {
+            int gcd = gcd(number1, number2);
+            return Math.abs(number1 * number2) / gcd;
+        }
+    }
+
+    // Function check whether a number
+    // is prime or not
+    public static boolean isPrime(int n)
+    {
+        if (n <= 1)
+            return false;
+
+        // Check if n=2 or n=3
+        if (n == 2 || n == 3)
+            return true;
+
+        // Check whether n is divisible by 2 or 3
+        if (n % 2 == 0 || n % 3 == 0)
+            return false;
+
+        // Check from 5 to square root of n
+        // Iterate i by (i+6)
+        for (int i = 5; i <= Math.sqrt(n); i = i + 6)
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+
+        return true;
+    }
     public int longestSubarray(int[] nums, int limit) {
         int left = 0, right, max = 0;
         TreeMap<Integer, Integer> map = new TreeMap<>();
@@ -367,6 +400,23 @@ public class A {
         for (int[] b : a) {
             print(b);
         }
+        System.out.println();
+    }
+
+    void printList(List<Integer> list) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.print(list.get(i) + ", ");
+        }
+        System.out.println();
+    }
+
+    private void printSet(Set<Integer> treeSet) {
+        Iterator<Integer> i = treeSet.iterator();
+        while (i.hasNext()) {
+            System.out.print(i.next() + ",");
+        }
+        System.out.println();
+
     }
 
     static class TreeNode {
