@@ -4,14 +4,75 @@ package other;
 import java.util.*;
 
 public class A {
+    public long numberOfPairs(int[] nums1, int[] nums2, int k) {
 
-    public static int lcm(int number1, int number2) {
-        if (number1 == 0 || number2 == 0)
-            return 0;
-        else {
-            int gcd = gcd(number1, number2);
-            return Math.abs(number1 * number2) / gcd;
+        // Create a HashMap to store the frequency of nums2[j] * k
+        Map<Long, Long> map1 = new HashMap<>();
+
+        // Populate the map with counts of nums1[j]
+        for (int num : nums1) {
+            if (num % k != 0) continue;
+            map1.put((long)num, map1.getOrDefault((long)num, 0L) + 1);
         }
+
+        // Create a HashMap to store the frequency of nums2[j] * k
+        Map<Long, Long> map2 = new HashMap<>();
+
+        // Populate the map with counts of nums2[j] * k
+        for (int num : nums2) {
+            map2.put((long)num, map2.getOrDefault((long)num, 0L) + 1);
+        }
+
+        long count = 0;
+
+        // Count good pairs by checking divisibility with the keys in the map
+        for (long num1 : map1.keySet()) {
+            List<Long> divisors = findDivisors(num1);
+            for (int i = 0; i < divisors.size(); i++) {
+                long num2 = divisors.get(i) / (long) k;
+                if (map2.containsKey(num2)) {
+                    count += map1.get(num1) * map2.get(num2);
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public static List<Long> findDivisors(long n) {
+        List<Long> divisors = new ArrayList<>();
+        long sqrtN = (long) Math.sqrt(n);
+
+        for (long i = 1; i <= sqrtN; i++) {
+            if (n % i == 0) {
+                divisors.add(i);
+                if (i != n / i) { // To avoid adding the square root twice
+                    divisors.add(n / i);
+                }
+            }
+        }
+
+        return divisors;
+    }
+
+    long maxNonAdjacentSum(int[] nums) {
+        long include = 0;
+        long exclude = 0;
+
+        for (int num : nums) {
+            long newExclude = Math.max(include, exclude);
+            include = exclude + num;
+            exclude = newExclude;
+        }
+
+        return Math.max(include, exclude);
+    }
+
+    void printMap(Map<Long, Long> map) {
+        for (long key : map.keySet()) {
+            System.out.print("key:" + key + ", value:" + map.get(key) + "\t");
+        }
+        System.out.println();
     }
 
     // Function check whether a number
