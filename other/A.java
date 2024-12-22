@@ -2,8 +2,106 @@
 package other;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class A {
+    // Solve the problem in Java.
+    public int maxDistinctElements(int[] nums, int k) {
+        // Sort the array to help maximize distinct elements
+        Arrays.sort(nums);
+
+        // Use a set to track distinct elements
+        Set<Integer> distinct = new HashSet<>();
+
+        int lowerBound = nums[0] - k;
+
+        for (int num : nums) {
+            // Try to add the closest value within the range
+            lowerBound = Math.max(lowerBound, num - k);
+            for (int newValue = lowerBound; newValue <= num + k; newValue++) {
+                if (!distinct.contains(newValue)) {
+                    distinct.add(newValue);
+                    lowerBound = newValue + 1;
+                    break;
+                }
+            }
+        }
+
+        return distinct.size();
+    }
+
+    static class Segment {
+        int start;
+        int end;
+        int value;
+        public Segment(int start, int end, int value) {
+            this.start = start;
+            this.end = end;
+            this.value = value;
+        }
+    }
+
+    public int minLength(String s, int numOps) {
+        int n = s.length();
+        
+        // Create a list of segments
+        List<Segment> segments = new ArrayList<>();
+        int start = 0;
+        while (start < n) {
+            int end = start;
+            while (end < n && s.charAt(end) == s.charAt(start)) {
+                end++;
+            }
+            segments.add(new Segment(start, end, s.charAt(start) - 'a'));
+            start = end;
+        }
+
+        // Create a priority queue to store the segments
+        PriorityQueue<Segment> pq = new PriorityQueue<>((s1, s2) -> {
+            int len1 = s1.end - s1.start;
+            int len2 = s2.end - s2.start;
+            if (len1 == len2) {
+                if (s1.start == 0 || s1.end == n - 1) {
+                    return -1;
+                }
+                if (s2.start == 0 || s2.end == n - 1) {
+                    return 1;
+                }
+            }
+            return Integer.compare(len2, len1);
+        });
+        pq.addAll(segments);
+
+        while (numOps > 0) {
+            // Get the largest segment
+            Segment largest = pq.poll();
+            if (largest == null || largest.end - largest.start <= 1) {
+                pq.add(largest);
+                break;
+            }
+
+            if (largest.end - largest.start > 2) {
+                // Split the largest segment into three segments
+                int mid = largest.start + (largest.end - largest.start) / 2;
+                pq.add(new Segment(largest.start, mid - 1, largest.value));
+                pq.add(new Segment(mid, mid, 1 - largest.value));
+                pq.add(new Segment(mid + 1, largest.end, largest.value));
+            } else {
+                if (largest.start == 0 || largest.end == n - 1) {
+                    pq.add(new Segment(largest.start, largest.start + 1, largest.value));
+                    pq.add(new Segment(largest.end - 1, largest.end, 1 - largest.value));
+                } else {
+                    break;
+                }
+            }
+
+            numOps--;
+        }
+
+        return pq.peek().end - pq.peek().start;
+    }
+
     public long numberOfPairs(int[] nums1, int[] nums2, int k) {
 
         // Create a HashMap to store the frequency of nums2[j] * k
@@ -194,26 +292,16 @@ public class A {
     }
 
     public static void main(String[] args) {
-        System.out.println(-1 % 4);
-        System.out.println(Integer.MAX_VALUE);
-        System.out.println(Integer.MIN_VALUE);
-        A a = new A();
-        System.out.println(a);
-        List<String> cars = new ArrayList<>();
-        cars.add("Volvo");
-        cars.add("Ford");
-        cars.add("BMW");
-        cars.add("Volvo");
-        cars.add("Ford");
-        cars.add("Volvo");
-        Map<String, Integer> counts = new HashMap<>();
-        // Your code starts from here.
-        // Should print 3.
-        System.out.println(counts.get("Volvo"));
-        // Should print 2.
-        System.out.println(counts.get("Ford"));
-        // Should print 1.
-        System.out.println(counts.get("BMW"));
+        Logger logger = Logger.getLogger(A.class.getName());
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info(String.valueOf(-1 % 4));
+            logger.info(String.valueOf(Integer.MAX_VALUE));
+            logger.info(String.valueOf(Integer.MIN_VALUE));
+            A a = new A();
+            UF uf = a.new UF(10);
+            logger.info(String.valueOf(uf.find(1)));
+            a.minLength("00", 1);
+        }
     }
 
     public int longestSlidingWindow(int[] nums, int target) {
@@ -610,5 +698,23 @@ public class A {
             return true;
         else
             return false;
+    }
+
+    static int[] toIntArray(String str) {
+        String[] s = str.split(",");
+        int[] arr = new int[s.length];
+        for (int i = 0; i < s.length; i++) {
+            arr[i] = Integer.parseInt(s[i]);
+        }
+        return arr;
+    }
+
+    static String[] toStringArray(String str) {
+        String[] s = str.split(",");
+        String[] arr = new String[s.length];
+        for (int i = 0; i < s.length; i++) {
+            arr[i] = s[i].replace("\"", "").trim();
+        }
+        return arr;
     }
 }
